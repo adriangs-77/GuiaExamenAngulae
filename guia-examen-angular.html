@@ -1,0 +1,4969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Guía de examen · Angular 22</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23c3002f'/%3E%3Cpath d='M12 4.5 19 7l-1.1 9.2L12 19.5 6.1 16.2 5 7l7-2.5Z' fill='%23fff'/%3E%3Cpath d='M12 8 15 15h-1.6l-.6-1.6h-1.6L10.6 15H9L12 8Z' fill='%23c3002f'/%3E%3C/svg%3E">
+<meta name="description" content="Guía de estudio para el examen de Angular 22: instalación, componentes, binding, signals, estructuras de control, routing, formularios, servicios y NgModule, con ejemplos y autoevaluación.">
+<style>
+/* ============================================================
+   Guía de examen Angular 22 — hoja de estilos
+   Autocontenida: sin fuentes ni scripts externos.
+   ============================================================ */
+
+:root{
+  --bg:#f6f7fb;
+  --bg-elev:#ffffff;
+  --bg-soft:#eef0f8;
+  --bg-soft-2:#e6e9f4;
+  --text:#171a2b;
+  --text-soft:#464b64;
+  --muted:#6a7089;
+  --border:#e2e5f0;
+  --border-strong:#cfd4e6;
+
+  --brand:#c3002f;
+  --brand-2:#8a3ffc;
+  --brand-3:#e40035;
+  --brand-soft:#fdeef1;
+
+  --code-bg:#151726;
+  --code-head:#1d2033;
+  --code-text:#e7e9f7;
+
+  --ok:#0f8a53;
+  --ok-bg:#e9f8f0;
+  --warn:#9a6200;
+  --warn-bg:#fff6e0;
+  --info:#0a5fb4;
+  --info-bg:#eaf3fe;
+  --danger:#b42318;
+  --danger-bg:#fdeceb;
+  --tip:#6b21c8;
+  --tip-bg:#f3ecfe;
+
+  --shadow-sm:0 1px 2px rgba(20,22,50,.06);
+  --shadow:0 2px 6px rgba(20,22,50,.05), 0 18px 40px -28px rgba(20,22,50,.45);
+  --radius:16px;
+  --radius-sm:10px;
+  --sidebar-w:286px;
+  --mono:ui-monospace, "SFMono-Regular", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+[data-theme="dark"]{
+  --bg:#0c0d16;
+  --bg-elev:#14161f;
+  --bg-soft:#1a1d2a;
+  --bg-soft-2:#242838;
+  --text:#e9ebf7;
+  --text-soft:#b9bed6;
+  --muted:#8e94b1;
+  --border:#242838;
+  --border-strong:#333952;
+
+  --brand:#ff5c7a;
+  --brand-2:#b98bff;
+  --brand-3:#ff6f8b;
+  --brand-soft:#281420;
+
+  --code-bg:#0a0b12;
+  --code-head:#13151f;
+  --code-text:#e7e9f7;
+
+  --ok:#57d9a3;
+  --ok-bg:#0e2019;
+  --warn:#f5c451;
+  --warn-bg:#241d0c;
+  --info:#79b8ff;
+  --info-bg:#0d1b2c;
+  --danger:#ff8b84;
+  --danger-bg:#2a1211;
+  --tip:#c4a5ff;
+  --tip-bg:#1c1430;
+
+  --shadow-sm:0 1px 2px rgba(0,0,0,.5);
+  --shadow:0 2px 8px rgba(0,0,0,.45), 0 24px 50px -30px rgba(0,0,0,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:24px; -webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- barra de progreso ---------- */
+#progress{
+  position:fixed; top:0; left:0; height:3px; width:0;
+  background:linear-gradient(90deg,var(--brand-3),var(--brand-2));
+  z-index:200; transition:width .12s linear;
+}
+
+/* ---------- barra móvil ---------- */
+.mobile-bar{
+  display:none;
+  position:sticky; top:0; z-index:90;
+  align-items:center; gap:10px;
+  padding:10px 14px;
+  background:color-mix(in srgb, var(--bg-elev) 92%, transparent);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(10px);
+}
+.mobile-bar strong{font-size:.94rem; letter-spacing:-.01em}
+.m-icon{
+  width:38px; height:38px; flex:0 0 auto;
+  display:grid; place-items:center;
+  border:1px solid var(--border); border-radius:10px;
+  background:var(--bg-elev); color:var(--text);
+  cursor:pointer; font-size:1rem;
+}
+.m-icon:hover{border-color:var(--border-strong)}
+
+/* ---------- layout ---------- */
+.layout{display:block}
+
+/* ---------- sidebar ---------- */
+.sidebar{
+  position:fixed; inset:0 auto 0 0; width:var(--sidebar-w);
+  display:flex; flex-direction:column;
+  background:var(--bg-elev);
+  border-right:1px solid var(--border);
+  z-index:100;
+}
+.brand{
+  display:flex; align-items:center; gap:12px;
+  padding:20px 18px 16px;
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  width:40px; height:40px; flex:0 0 auto;
+  display:grid; place-items:center;
+  border-radius:11px;
+  background:linear-gradient(145deg,#e40035,#a64dff);
+  box-shadow:0 6px 18px -8px rgba(196,0,47,.85);
+}
+.logo svg{width:22px; height:22px; display:block}
+.brand strong{display:block; font-size:.95rem; letter-spacing:-.015em; line-height:1.25}
+.brand small{display:block; color:var(--muted); font-size:.73rem; letter-spacing:.02em; text-transform:uppercase; margin-top:2px}
+
+.search{padding:14px 14px 8px}
+.search input{
+  width:100%; padding:9px 12px;
+  border:1px solid var(--border); border-radius:10px;
+  background:var(--bg-soft); color:var(--text);
+  font-family:inherit; font-size:.86rem; outline:none;
+  transition:border-color .15s, background .15s;
+}
+.search input:focus{border-color:var(--brand); background:var(--bg-elev)}
+.search input::placeholder{color:var(--muted)}
+
+.toc{overflow-y:auto; padding:6px 10px 20px; flex:1; scrollbar-width:thin}
+.toc .grp{
+  font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); padding:16px 10px 6px;
+}
+.toc a{
+  display:flex; gap:9px; align-items:baseline;
+  padding:7px 10px; margin:1px 0;
+  border-radius:9px; border-left:2px solid transparent;
+  color:var(--text-soft); text-decoration:none;
+  font-size:.845rem; line-height:1.35;
+  transition:background .12s, color .12s, border-color .12s;
+}
+.toc a:hover{background:var(--bg-soft); color:var(--text)}
+.toc a .n{
+  font-variant-numeric:tabular-nums; font-size:.7rem; font-weight:700;
+  color:var(--muted); min-width:1.4em; padding-top:.1em;
+}
+.toc a.active{
+  background:var(--brand-soft); color:var(--brand);
+  border-left-color:var(--brand); font-weight:600;
+}
+.toc a.active .n{color:var(--brand)}
+[data-theme="dark"] .toc a.active{color:#ffb3c1}
+
+.side-foot{
+  border-top:1px solid var(--border); padding:10px 14px 14px;
+  display:flex; gap:8px; align-items:center; justify-content:space-between;
+}
+.side-foot small{font-size:.68rem; color:var(--muted); line-height:1.3}
+.theme-btn{
+  border:1px solid var(--border); background:var(--bg-soft); color:var(--text);
+  border-radius:9px; padding:7px 10px; cursor:pointer;
+  font-size:.74rem; font-family:inherit; display:flex; align-items:center; gap:6px;
+  white-space:nowrap;
+}
+.theme-btn:hover{border-color:var(--border-strong)}
+
+.overlay{
+  display:none; position:fixed; inset:0; z-index:95;
+  background:rgba(10,12,25,.5); backdrop-filter:blur(2px);
+}
+
+/* ---------- main ---------- */
+.main{margin-left:var(--sidebar-w); min-height:100vh}
+.content{max-width:1000px; margin:0 auto; padding:0 32px 100px}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative; overflow:hidden;
+  margin:32px 0 8px;
+  border-radius:24px;
+  padding:44px 42px 38px;
+  color:#fff;
+  background:
+    radial-gradient(900px 400px at 92% -20%, rgba(166,77,255,.62), transparent 62%),
+    radial-gradient(700px 420px at 0% 120%, rgba(255,86,64,.5), transparent 60%),
+    linear-gradient(135deg,#2a0410 0%,#5d0620 48%,#240a3d 100%);
+  box-shadow:0 30px 60px -34px rgba(60,0,30,.8);
+}
+.hero::after{
+  content:""; position:absolute; inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(circle at 70% 30%, #000, transparent 78%);
+  pointer-events:none;
+}
+.hero > *{position:relative; z-index:1}
+.hero .kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.72rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.22);
+  padding:6px 12px; border-radius:999px;
+}
+.hero h1{
+  margin:18px 0 10px;
+  font-size:clamp(2.1rem, 4.6vw, 3.15rem);
+  line-height:1.06; letter-spacing:-.035em; font-weight:800;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(100deg,#ff8fa3,#ffd166 45%,#c9a6ff);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero p.lead{
+  margin:0; max-width:62ch;
+  font-size:1.02rem; color:rgba(255,255,255,.82);
+}
+.hero-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px}
+.hero-chips span{
+  font-size:.76rem; padding:5px 11px; border-radius:999px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.92);
+}
+.hero-stats{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px; margin-top:28px;
+}
+.hero-stats div{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px; padding:12px 14px;
+}
+.hero-stats b{display:block; font-size:1.35rem; letter-spacing:-.02em}
+.hero-stats small{color:rgba(255,255,255,.72); font-size:.74rem}
+
+/* ---------- secciones ---------- */
+.sec{padding-top:46px; scroll-margin-top:16px}
+.sec.sec-hidden{display:none}
+.sec-head{margin-bottom:18px}
+.sec-head .eyebrow{
+  display:flex; align-items:center; gap:10px;
+  font-size:.73rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--brand);
+}
+.sec-head .eyebrow .num{
+  display:grid; place-items:center;
+  width:26px; height:26px; border-radius:8px;
+  background:linear-gradient(145deg,var(--brand-3),var(--brand-2));
+  color:#fff; font-size:.78rem; letter-spacing:0;
+}
+.sec h2{
+  margin:10px 0 0;
+  font-size:clamp(1.5rem,2.6vw,1.95rem);
+  letter-spacing:-.028em; line-height:1.15;
+}
+.sec .intro{color:var(--text-soft); margin:10px 0 0; max-width:74ch; font-size:1rem}
+
+h3{
+  margin:32px 0 10px;
+  font-size:1.14rem; letter-spacing:-.015em; line-height:1.3;
+  scroll-margin-top:16px;
+}
+h3::before{
+  content:""; display:inline-block;
+  width:4px; height:15px; margin-right:10px;
+  border-radius:2px; vertical-align:-2px;
+  background:linear-gradient(180deg,var(--brand-3),var(--brand-2));
+}
+h4{margin:22px 0 8px; font-size:.96rem; letter-spacing:-.005em}
+p{margin:11px 0}
+.content a{color:var(--brand); text-underline-offset:2px}
+.content ul,.content ol{margin:10px 0; padding-left:22px}
+.content li{margin:5px 0}
+.content li::marker{color:var(--brand)}
+strong{font-weight:650}
+em{font-style:italic}
+
+/* ---------- cards ---------- */
+.card{
+  background:var(--bg-elev);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px 22px;
+  box-shadow:var(--shadow-sm);
+  margin:16px 0;
+}
+.card h4:first-child,.card h3:first-child,.card p:first-child{margin-top:0}
+.card .card-title{
+  display:flex; align-items:center; gap:9px;
+  font-weight:700; font-size:.92rem; margin-bottom:6px;
+}
+.grid{display:grid; gap:14px}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid.three{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.card.plain{box-shadow:none; background:var(--bg-soft); border-style:dashed}
+
+/* ---------- callouts ---------- */
+.note{
+  --c:var(--info); --bgc:var(--info-bg);
+  display:flex; gap:12px;
+  margin:18px 0; padding:13px 16px 13px 15px;
+  background:var(--bgc);
+  border:1px solid color-mix(in srgb, var(--c) 30%, transparent);
+  border-left:3px solid var(--c);
+  border-radius:0 12px 12px 0;
+  font-size:.93rem;
+}
+.note .ico{flex:0 0 auto; font-size:1rem; line-height:1.5; filter:saturate(.9)}
+.note .body{min-width:0}
+.note .body > :first-child{margin-top:0}
+.note .body > :last-child{margin-bottom:0}
+.note .label{
+  display:block; font-weight:750; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--c);
+  margin-bottom:2px;
+}
+.note.tip{--c:var(--tip); --bgc:var(--tip-bg)}
+.note.warn{--c:var(--warn); --bgc:var(--warn-bg)}
+.note.danger{--c:var(--danger); --bgc:var(--danger-bg)}
+.note.ok{--c:var(--ok); --bgc:var(--ok-bg)}
+.note.exam{--c:var(--brand); --bgc:var(--brand-soft)}
+
+/* ---------- código ---------- */
+code{
+  font-family:var(--mono);
+  font-size:.855em;
+  background:var(--bg-soft-2);
+  border:1px solid var(--border);
+  padding:.12em .38em;
+  border-radius:6px;
+  white-space:normal;
+  overflow-wrap:break-word;
+}
+[data-theme="dark"] code{background:#1e2233; border-color:#2c3146; white-space:normal}
+h2 code,h3 code,h4 code{font-size:.9em}
+.content td code,.content th code{font-size:.8em}
+
+.code{
+  margin:16px 0;
+  background:var(--code-bg);
+  border:1px solid #262a3d;
+  border-radius:13px;
+  overflow:hidden;
+  box-shadow:0 14px 30px -22px rgba(0,0,0,.7);
+}
+.code figcaption{
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px 8px 14px;
+  background:var(--code-head);
+  border-bottom:1px solid #262a3d;
+  font-family:var(--mono);
+  font-size:.74rem;
+  color:#9aa1c0;
+}
+.code figcaption .dots{display:flex; gap:5px; margin-right:4px}
+.code figcaption .dots i{width:8px; height:8px; border-radius:50%; display:block; background:#ff5f57}
+.code figcaption .dots i:nth-child(2){background:#febc2e}
+.code figcaption .dots i:nth-child(3){background:#28c840}
+.code figcaption .name{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#c3c8e0}
+.code figcaption .lang{
+  font-size:.65rem; text-transform:uppercase; letter-spacing:.09em;
+  color:#7f87a8; border:1px solid #2c3147; border-radius:999px; padding:1px 7px;
+  flex:0 0 auto;
+}
+.copy{
+  flex:0 0 auto;
+  border:1px solid #313753; background:#20243a; color:#c3c8e0;
+  border-radius:7px; padding:4px 9px; cursor:pointer;
+  font-family:var(--mono); font-size:.7rem;
+}
+.copy:hover{background:#2a2f49; color:#fff}
+.copy.done{background:#14532d; border-color:#1f7a44; color:#b7f7cf}
+
+.code pre{
+  margin:0; padding:16px 18px;
+  overflow-x:auto;
+  font-family:var(--mono);
+  font-size:.815rem; line-height:1.62;
+  color:var(--code-text);
+  tab-size:2;
+}
+.code pre code{
+  font-size:inherit; background:none; border:0; padding:0;
+  white-space:pre; color:inherit; font-family:inherit;
+}
+.code pre::-webkit-scrollbar{height:9px}
+.code pre::-webkit-scrollbar-thumb{background:#343a54; border-radius:9px}
+
+/* tokens */
+.t-com{color:#7d85a3; font-style:italic}
+.t-str{color:#a5e6a8}
+.t-dec{color:#ffd479}
+.t-kw{color:#ff86a6}
+.t-num{color:#f3ad74}
+.t-fn{color:#84cbff}
+.t-tag{color:#ff9483}
+.t-attr{color:#ffd479}
+.t-interp{color:#79e6d0}
+.t-block{color:#caa8ff}
+.t-flag{color:#84cbff}
+
+/* ---------- tablas ---------- */
+.tablewrap{
+  margin:16px 0; border:1px solid var(--border); border-radius:13px;
+  overflow:hidden; background:var(--bg-elev); box-shadow:var(--shadow-sm);
+}
+.tablewrap .scroll{overflow-x:auto}
+table{width:100%; border-collapse:collapse; font-size:.875rem}
+thead th{
+  background:var(--bg-soft);
+  text-align:left; font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--muted); font-weight:700;
+  padding:11px 14px; border-bottom:1px solid var(--border); white-space:nowrap;
+}
+tbody td{padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb, var(--bg-soft) 45%, transparent)}
+tbody td:first-child{font-weight:600; color:var(--text)}
+caption{caption-side:bottom; padding:8px 14px; font-size:.75rem; color:var(--muted); text-align:left}
+
+/* ---------- misc ---------- */
+kbd{
+  font-family:var(--mono); font-size:.78em;
+  border:1px solid var(--border-strong); border-bottom-width:2px;
+  background:var(--bg-elev); border-radius:6px; padding:.1em .4em;
+  white-space:nowrap;
+}
+.pill{
+  display:inline-block; font-size:.68rem; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase;
+  padding:2px 8px; border-radius:999px;
+  background:var(--bg-soft-2); color:var(--text-soft);
+  border:1px solid var(--border);
+  vertical-align:middle;
+}
+.pill.new{background:var(--ok-bg); color:var(--ok); border-color:color-mix(in srgb,var(--ok) 30%,transparent)}
+.pill.old{background:var(--warn-bg); color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.pill.dep{background:var(--danger-bg); color:var(--danger); border-color:color-mix(in srgb,var(--danger) 30%,transparent)}
+.pill.core{background:var(--brand-soft); color:var(--brand); border-color:color-mix(in srgb,var(--brand) 25%,transparent)}
+
+.anchor{
+  color:var(--muted); text-decoration:none; font-weight:400;
+  opacity:0; margin-left:8px; font-size:.8em; transition:opacity .15s;
+}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+
+.checklist{list-style:none; padding-left:0}
+.checklist li{
+  position:relative; padding-left:28px; margin:8px 0;
+}
+.checklist li::before{
+  content:"✓"; position:absolute; left:0; top:1px;
+  width:19px; height:19px; border-radius:6px;
+  display:grid; place-items:center;
+  background:var(--ok-bg); color:var(--ok);
+  font-size:.7rem; font-weight:800;
+}
+
+.crosslist{list-style:none; padding-left:0}
+.crosslist li{position:relative; padding-left:26px; margin:8px 0}
+.crosslist li::before{
+  content:"✕"; position:absolute; left:0; top:1px;
+  color:var(--danger); font-weight:800; font-size:.85rem;
+}
+
+/* ---------- quiz ---------- */
+details.qa{
+  border:1px solid var(--border); border-radius:12px;
+  background:var(--bg-elev); margin:10px 0;
+  box-shadow:var(--shadow-sm); overflow:hidden;
+}
+details.qa summary{
+  cursor:pointer; padding:13px 16px;
+  font-weight:600; font-size:.93rem;
+  list-style:none; display:flex; gap:10px; align-items:flex-start;
+  transition:background .12s;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"?"; flex:0 0 auto;
+  width:21px; height:21px; border-radius:7px;
+  display:grid; place-items:center;
+  background:var(--brand-soft); color:var(--brand);
+  font-size:.75rem; font-weight:800; margin-top:1px;
+}
+details.qa summary:hover{background:var(--bg-soft)}
+details.qa[open] summary{border-bottom:1px solid var(--border)}
+details.qa .answer{
+  padding:12px 16px 14px 47px;
+  font-size:.9rem; color:var(--text-soft);
+  background:color-mix(in srgb, var(--bg-soft) 55%, transparent);
+}
+details.qa .answer p:first-child{margin-top:0}
+details.qa .answer p:last-child{margin-bottom:0}
+details.qa .answer code{white-space:normal}
+
+/* ---------- footer ---------- */
+.foot{
+  margin-top:56px; padding:28px 30px;
+  border-radius:18px;
+  background:linear-gradient(140deg, rgba(196,0,47,.07), rgba(138,63,252,.07));
+  border:1px solid var(--border);
+  color:var(--text-soft); font-size:.86rem;
+}
+.foot strong{color:var(--text)}
+.foot .row{display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:center}
+
+.top-link{
+  display:inline-flex; align-items:center; gap:7px;
+  text-decoration:none; font-weight:600; font-size:.82rem;
+  border:1px solid var(--border); background:var(--bg-elev);
+  color:var(--text); border-radius:9px; padding:7px 12px;
+}
+.top-link:hover{border-color:var(--border-strong)}
+
+.no-results{
+  display:none; padding:26px; text-align:center;
+  border:1px dashed var(--border-strong); border-radius:14px;
+  color:var(--muted); margin-top:24px;
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition-duration:.01ms !important; animation-duration:.01ms !important}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  html{scroll-padding-top:74px}
+  .sidebar{transform:translateX(-100%); transition:transform .25s ease; box-shadow:none; width:300px}
+  .sidebar.open{transform:translateX(0); box-shadow:0 0 0 100vmax rgba(0,0,0,.001), 30px 0 60px -20px rgba(0,0,0,.4)}
+  .overlay.show{display:block}
+  .main{margin-left:0}
+  .content{padding:0 18px 80px}
+  .mobile-bar{display:flex}
+  .hero{margin-top:20px; padding:32px 24px 28px; border-radius:20px}
+  .sec{padding-top:38px}
+  .note{font-size:.9rem}
+  .code pre{font-size:.78rem}
+  body.nav-open{overflow:hidden}
+}
+@media (max-width:520px){
+  .hero h1{font-size:2rem}
+  .hero p.lead{font-size:.95rem}
+  .card{padding:16px 16px}
+  .code pre{padding:13px 12px}
+  .content{padding:0 14px 70px}
+  .sec-head .eyebrow{font-size:.68rem}
+}
+
+/* ---------- impresión ---------- */
+@media print{
+  :root{--bg:#fff; --bg-elev:#fff; --bg-soft:#f5f5f8; --text:#000; --text-soft:#222; --border:#ccc}
+  #progress,.mobile-bar,.sidebar,.overlay,.copy,.top-link,.no-results{display:none !important}
+  .main{margin:0}
+  .content{max-width:none; padding:0}
+  .hero{color:#111; background:#fff; border:2px solid #c3002f; box-shadow:none}
+  .hero p.lead,.hero-chips span,.hero-stats small{color:#333}
+  .hero-chips span,.hero-stats div{border-color:#ccc; background:#fafafa}
+  .hero h1 em{color:#c3002f; -webkit-text-fill-color:#c3002f}
+  .code{box-shadow:none; border:1px solid #bbb; break-inside:avoid}
+  .code figcaption{background:#eee; color:#333}
+  .code pre{color:#111; background:#fafafa}
+  .t-com{color:#666}.t-str{color:#0a6b2d}.t-kw{color:#a1003f}.t-dec{color:#8a5a00}
+  .t-fn{color:#004f8a}.t-tag{color:#a1003f}.t-attr{color:#8a5a00}.t-interp{color:#006b62}
+  .t-block{color:#5a2ca0}.t-num{color:#8a4b00}.t-flag{color:#004f8a}
+  .card,.tablewrap,.note,details.qa{break-inside:avoid; box-shadow:none}
+  .tablewrap .scroll{overflow:visible}
+  thead{display:table-header-group}
+  .sec{padding-top:24px; break-before:auto}
+  .sec h2{break-after:avoid}
+  details.qa summary::before{content:"R"}
+  a[href^="#"]::after{content:""}
+  .pagebreak{break-before:page}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="mobile-bar">
+  <button class="m-icon" id="navToggle" aria-label="Abrir menú">☰</button>
+  <strong>Guía Angular 22</strong>
+  <span style="flex:1"></span>
+  <button class="m-icon" id="themeToggleMobile" aria-label="Cambiar tema">◐</button>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2.5 21 6l-1.4 12L12 21.5 3.4 18 2 6l10-3.5Z" fill="#fff" opacity=".18"/>
+          <path d="M12 2.5 21 6l-1.4 12L12 21.5 3.4 18 2 6l10-3.5Z" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>
+          <path d="M12 6.4 16.4 17h-1.9l-.9-2.3H10.4L9.5 17H7.6L12 6.4Zm0 3.9-1.1 2.8h2.2L12 10.3Z" fill="#fff"/>
+        </svg>
+      </span>
+      <div>
+        <strong>Guía Angular 22</strong>
+        <small>Preparación de examen</small>
+      </div>
+    </div>
+
+    <div class="search">
+      <input id="q" type="search" placeholder="Buscar en la guía…" aria-label="Buscar en la guía" autocomplete="off">
+    </div>
+
+    <nav class="toc" id="toc">
+      <a href="#portada"><span class="n">★</span> Portada y ruta de estudio</a>
+
+      <div class="grp">Puesta en marcha</div>
+      <a href="#instalacion"><span class="n">1</span> Instalación del entorno</a>
+      <a href="#proyecto"><span class="n">2</span> Crear y ejecutar el proyecto</a>
+
+      <div class="grp">Componentes y datos</div>
+      <a href="#componentes"><span class="n">3</span> Componentes</a>
+      <a href="#binding"><span class="n">4</span> Binding</a>
+      <a href="#signals"><span class="n">5</span> Signals</a>
+      <a href="#control"><span class="n">6</span> Estructuras de control</a>
+
+      <div class="grp">Navegación y comunicación</div>
+      <a href="#routing"><span class="n">7</span> Routing</a>
+      <a href="#comunicacion"><span class="n">8</span> Comunicación entre componentes</a>
+      <a href="#ngmodule"><span class="n">9</span> NgModule</a>
+
+      <div class="grp">Formularios y servicios</div>
+      <a href="#formularios"><span class="n">10</span> Formularios reactivos</a>
+      <a href="#servicios"><span class="n">11</span> Servicios e inyección</a>
+      <a href="#material"><span class="n">12</span> Angular Material</a>
+
+      <div class="grp">Repaso</div>
+      <a href="#chuleta"><span class="n">13</span> Chuleta de comandos</a>
+      <a href="#autoexamen"><span class="n">14</span> Autoexamen</a>
+      <a href="#glosario"><span class="n">15</span> Glosario y cierre</a>
+    </nav>
+
+    <div class="side-foot">
+      <small>Atajos: <kbd>/</kbd> buscar<br>Contenido imprimible</small>
+      <button class="theme-btn" id="themeToggle" aria-label="Cambiar tema">◐ Tema</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="content">
+
+<!-- ==================== PORTADA ==================== -->
+<header class="hero" id="portada">
+  <span class="kicker">Temario de examen · Angular moderno</span>
+  <h1>Guía de examen <em>Angular 22</em></h1>
+  <p class="lead">
+    Instalación, componentes standalone, binding, signals, estructuras de control,
+    routing, formularios reactivos, servicios e inyección de dependencias:
+    todo el temario explicado, con ejemplos ejecutables, tablas comparativas y
+    un autoexamen final.
+  </p>
+  <div class="hero-chips">
+    <span>Standalone components</span>
+    <span>Signals</span>
+    <span>@if / @for</span>
+    <span>Routing + guards</span>
+    <span>Reactive Forms</span>
+    <span>DI con inject()</span>
+  </div>
+  <div class="hero-stats">
+    <div><b>15</b><small>bloques de estudio</small></div>
+    <div><b>70+</b><small>ejemplos de código</small></div>
+    <div><b>35</b><small>preguntas de repaso</small></div>
+    <div><b>100%</b><small>sin dependencias externas</small></div>
+  </div>
+</header>
+
+<section class="sec" id="como-usar">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">★</span> Antes de empezar</div>
+    <h2>Cómo usar esta guía</h2>
+    <p class="intro">
+      El temario del examen está organizado en el mismo orden lógico en el que se construye
+      una aplicación: primero se prepara el entorno, después se crean componentes, se les dota
+      de estado, se navega entre ellos y, por último, se añaden formularios y servicios.
+    </p>
+  </div>
+
+  <div class="grid three">
+    <div class="card">
+      <div class="card-title">1 · Lee el concepto</div>
+      <p style="margin:0; font-size:.9rem; color:var(--text-soft)">
+        Cada apartado empieza con la definición mínima que se pregunta en un examen escrito.
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">2 · Estudia el ejemplo</div>
+      <p style="margin:0; font-size:.9rem; color:var(--text-soft)">
+        Los bloques de código incluyen el nombre del archivo, para que sepas exactamente
+        dónde va cada fragmento.
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">3 · Autoevalúate</div>
+      <p style="margin:0; font-size:.9rem; color:var(--text-soft)">
+        Termina con la chuleta de comandos y las 25 preguntas del
+        <a href="#autoexamen">autoexamen</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="note tip">
+    <span class="ico">💡</span>
+    <div class="body">
+      <span class="label">Cómo leer los avisos</span>
+      <p>
+        <span class="pill new">Moderno</span> indica la forma recomendada en Angular 22.
+        <span class="pill old">Clásico</span> indica una API que sigue siendo válida y aparece
+        en proyectos existentes. <span class="pill dep">Deprecado</span> señala algo que ya
+        no debería usarse en código nuevo.
+      </p>
+    </div>
+  </div>
+
+  <h3>Ruta de estudio recomendada</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Sesión</th><th>Bloques</th><th>Objetivo</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><a href="#instalacion">1</a> · <a href="#proyecto">2</a></td>
+            <td>Instalar Node.js y el CLI, crear <code>PrimerProyecto</code> y levantarlo en el puerto 4200.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><a href="#componentes">3</a> · <a href="#binding">4</a></td>
+            <td>Entender la anatomía de un componente y los cuatro tipos de binding.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><a href="#signals">5</a> · <a href="#control">6</a></td>
+            <td>Gestionar estado con signals y renderizar listas y condiciones.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><a href="#routing">7</a> · <a href="#comunicacion">8</a></td>
+            <td>Navegar entre vistas y comunicar componentes padre e hijo.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><a href="#formularios">10</a> · <a href="#servicios">11</a></td>
+            <td>Construir formularios reactivos y compartir lógica mediante servicios.</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><a href="#chuleta">13</a> · <a href="#autoexamen">14</a></td>
+            <td>Repasar comandos, mensajes de error y resolver el autoexamen.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 1. INSTALACIÓN ==================== -->
+<section class="sec" id="instalacion">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">1</span> Entorno de trabajo</div>
+    <h2>Instalación del entorno</h2>
+    <p class="intro">
+      Una aplicación Angular necesita dos piezas base: <strong>Node.js</strong> (que aporta
+      el entorno de ejecución y <code>npm</code>) y el <strong>Angular CLI</strong> (la
+      herramienta de línea de comandos con la que se crea, ejecuta y compila el proyecto).
+    </p>
+  </div>
+
+  <h3>Paso 1 · Descargar Node.js desde el Prebuilt Installer</h3>
+  <p>
+    El <strong>Prebuilt Installer</strong> es el instalador ya compilado y listo para usar que
+    se descarga desde <code>&lt;nodejs.org&gt;</code>; no hay que compilar nada. Incluye
+    <code>node</code> y <code>npm</code> en la misma instalación.
+  </p>
+  <ul>
+    <li><strong>Windows:</strong> archivo <code>.msi</code> (Windows Installer).</li>
+    <li><strong>macOS:</strong> archivo <code>.pkg</code>.</li>
+    <li><strong>Linux:</strong> binarios <code>.tar.xz</code> o el gestor de paquetes de la distribución.</li>
+  </ul>
+  <p>
+    Se recomienda elegir la versión <strong>LTS</strong> (soporte a largo plazo) que cumpla los
+    requisitos de Angular 22. Durante la instalación hay que dejar marcada la opción de añadir
+    Node al <code>PATH</code> para poder usar <code>node</code> y <code>npm</code> desde cualquier terminal.
+  </p>
+
+  <h3>Compatibilidad: Angular 22 y Node.js</h3>
+  <p>
+    Para Angular 22 hay que utilizar una versión de Node.js <strong>compatible con la versión
+    instalada</strong> del framework. Si la versión no encaja, el CLI se detiene con un error
+    de versión no soportada.
+  </p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Angular</th><th>Node.js compatible</th><th>TypeScript</th><th>Observación</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>22.x</td>
+            <td><code>^22.22.3</code> · <code>^24.15.0</code> · <code>^26.0.0</code></td>
+            <td>6.0.x</td>
+            <td>Node 20 ya no está soportado.</td>
+          </tr>
+          <tr>
+            <td>21.x</td>
+            <td><code>^20.19.0</code> · <code>^22.12.0</code> · <code>^24.0.0</code></td>
+            <td>5.9.x</td>
+            <td>Versión de transición.</td>
+          </tr>
+          <tr>
+            <td>20.x</td>
+            <td><code>^20.19.0</code> · <code>^22.12.0</code> · <code>^24.0.0</code></td>
+            <td>5.8.x</td>
+            <td>Fin de soporte.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="note warn">
+    <span class="ico">⚠️</span>
+    <div class="body">
+      <span class="label">Error típico de versión</span>
+      <p>
+        Si el CLI muestra <code>Node.js version v20.x.x detected. Angular CLI requires…</code>
+        o termina con código de salida 3, la solución no es reinstalar Angular: hay que
+        <strong>actualizar Node.js</strong> a una versión soportada y volver a comprobarlo con
+        <code>node -v</code>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Paso 2 · Comprobar la instalación</h3>
+  <p>Se abren dos comprobaciones: versión de Node y versión de npm.</p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">node -v     # muestra la versión de Node.js instalada
+npm -v      # muestra la versión de npm (viene con Node.js)
+ng version  # muestra la versión de Angular CLI</code></pre>
+  </figure>
+  <p>Ejemplo de salida correcta para Angular 22:</p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">salida esperada</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">$ node -v
+v22.22.3
+$ npm -v
+10.9.4</code></pre>
+  </figure>
+  <div class="note exam">
+    <span class="ico">🎯</span>
+    <div class="body">
+      <span class="label">Pregunta de examen</span>
+      <p>
+        <strong>¿Qué comandos comprueban la instalación?</strong> <code>node -v</code> y
+        <code>npm -v</code>. La opción <code>-v</code> significa <em>version</em>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Paso 3 · Instalar Angular CLI</h3>
+  <p>
+    El CLI se instala de forma global con npm. La opción <code>-g</code> (o
+    <code>--global</code>) hace que el comando <code>ng</code> esté disponible en cualquier carpeta.
+  </p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">npm install -g @angular/cli
+
+# opcional: fijar la versión 22 del CLI
+npm install -g @angular/cli@22</code></pre>
+  </figure>
+  <p>Para confirmar la instalación:</p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">ng version</code></pre>
+  </figure>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">salida esperada</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\ .__/\__,_|\__,_|_|\__,_|_|       \____|_____|___|
+         |_|
+
+Angular CLI: 22.0.0
+Node: 22.22.3
+Package Manager: npm 10.9.4</code></pre>
+  </figure>
+
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Dos formas de ejecutar el CLI</span>
+      <p>
+        <code>ng</code> usa el CLI global si no existe uno local en el proyecto.
+        <code>npx ng &lt;comando&gt;</code> usa siempre el CLI instalado en
+        <code>node_modules</code>, lo que evita desajustes de versión entre la global y la del proyecto.
+      </p>
+    </div>
+  </div>
+
+  <h3>Problemas frecuentes en la instalación</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Síntoma</th><th>Causa habitual</th><th>Solución</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>'ng' no se reconoce como comando</code></td>
+            <td>La carpeta global de npm no está en el <code>PATH</code>.</td>
+            <td>Reabrir la terminal; si persiste, revisar <code>npm config get prefix</code> y añadirla al <code>PATH</code>.</td>
+          </tr>
+          <tr>
+            <td><code>EACCES: permission denied</code></td>
+            <td>Instalación global sin permisos.</td>
+            <td>Usar un gestor de versiones (nvm) o cambiar el prefijo de npm; evitar <code>sudo npm install -g</code>.</td>
+          </tr>
+          <tr>
+            <td>El CLI se cierra con error de versión de Node.</td>
+            <td>Node.js anterior al mínimo exigido.</td>
+            <td>Instalar Node 22.22.3+, 24.15.0+ o 26.x y comprobar con <code>node -v</code>.</td>
+          </tr>
+          <tr>
+            <td>Comportamiento distinto al del equipo.</td>
+            <td>CLI global y CLI del proyecto con versiones distintas.</td>
+            <td>Ejecutar <code>npx ng &lt;comando&gt;</code> o alinear la global con la del proyecto.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note ok">
+    <span class="ico">✅</span>
+    <div class="body">
+      <span class="label">Checklist del bloque 1</span>
+      <p>
+        Node.js instalado desde el Prebuilt Installer · versión compatible con Angular 22 ·
+        <code>node -v</code> y <code>npm -v</code> responden · <code>ng version</code> muestra el CLI.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 2. PROYECTO ==================== -->
+<section class="sec" id="proyecto">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">2</span> Primer proyecto</div>
+    <h2>Crear y ejecutar el proyecto</h2>
+    <p class="intro">
+      Con el entorno listo, el siguiente paso es generar el proyecto con <code>ng new</code>,
+      entender las preguntas del CLI y arrancar el servidor de desarrollo con <code>ng serve</code>.
+    </p>
+  </div>
+
+  <h3>Crear el proyecto: <code>ng new</code></h3>
+  <ol>
+    <li>Navegar a la carpeta donde se quiere crear el proyecto (<code>cd</code>).</li>
+    <li>Ejecutar el comando de creación con el nombre del proyecto.</li>
+  </ol>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">cd ~/proyectos
+ng new PrimerProyecto</code></pre>
+  </figure>
+  <p>
+    Angular crea actualmente los proyectos utilizando <strong>componentes standalone por
+    defecto</strong>. Por eso en los proyectos nuevos normalmente <strong>no existe
+    <code>app.module.ts</code></strong>.
+  </p>
+
+  <h3>Opciones que puede preguntar el CLI</h3>
+  <p>
+    Durante la creación, Angular CLI puede preguntar distintas opciones de configuración.
+    Las respuestas se guardan en <code>angular.json</code> y afectan a la estructura del proyecto.
+  </p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Pregunta</th><th>Qué significa</th><th>Respuesta habitual</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><em>Which stylesheet format would you like to use?</em></td>
+            <td>Formato de hojas de estilo del proyecto.</td>
+            <td>CSS (o SCSS si se usa Sass).</td>
+          </tr>
+          <tr>
+            <td><em>Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG)?</em></td>
+            <td>Añadir renderizado en servidor / prerenderizado.</td>
+            <td>No, para una SPA de examen.</td>
+          </tr>
+          <tr>
+            <td><em>Do you want to create a zoneless application?</em></td>
+            <td>Modo sin Zone.js: la detección de cambios se apoya en signals.</td>
+            <td>Según el proyecto; en Angular 22 es la dirección recomendada.</td>
+          </tr>
+          <tr>
+            <td><em>Do you want to enable AI tooling / config files?</em></td>
+            <td>Añadir ficheros de configuración para asistentes de IA.</td>
+            <td>No, irrelevante para el examen.</td>
+          </tr>
+          <tr>
+            <td><em>Would you like to share pseudonymous usage data?</em></td>
+            <td>Telemetría anónima del CLI.</td>
+            <td>Indiferente.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p>Las opciones también pueden indicarse directamente, sin preguntas interactivas:</p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">ng new PrimerProyecto --style=css --routing --skip-git
+cd PrimerProyecto
+npm install   # solo si no se instalaron las dependencias</code></pre>
+  </figure>
+
+  <h3>Estructura generada</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Archivo / carpeta</th><th>Función</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>src/main.ts</code></td><td>Punto de entrada: arranca la aplicación con <code>bootstrapApplication</code>.</td></tr>
+          <tr><td><code>src/app/app.ts</code></td><td>Componente raíz (clase <code>App</code>) con su selector <code>app-root</code>.</td></tr>
+          <tr><td><code>src/app/app.html</code></td><td>Plantilla del componente raíz.</td></tr>
+          <tr><td><code>src/app/app.css</code></td><td>Estilos del componente raíz.</td></tr>
+          <tr><td><code>src/app/app.config.ts</code></td><td>Configuración global: <code>providers</code> como el router o HttpClient.</td></tr>
+          <tr><td><code>src/app/app.routes.ts</code></td><td>Definición del arreglo <code>routes</code>.</td></tr>
+          <tr><td><code>src/index.html</code></td><td>HTML base que contiene <code>&lt;app-root&gt;&lt;/app-root&gt;</code>.</td></tr>
+          <tr><td><code>src/styles.css</code></td><td>Estilos globales de toda la aplicación.</td></tr>
+          <tr><td><code>angular.json</code></td><td>Configuración del CLI: build, serve, estilos, assets.</td></tr>
+          <tr><td><code>package.json</code></td><td>Dependencias y scripts (<code>start</code>, <code>build</code>, <code>test</code>).</td></tr>
+          <tr><td><code>tsconfig.json</code></td><td>Configuración de TypeScript.</td></tr>
+          <tr><td><code>public/</code></td><td>Recursos estáticos accesibles por URL.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Nombres sin sufijo</span>
+      <p>
+        Desde Angular 20 el CLI genera <code>app.ts</code>, <code>app.html</code> y la clase
+        <code>App</code>. En tutoriales antiguos verás <code>app.component.ts</code> y
+        <code>AppComponent</code>: es el mismo concepto con otra convención de nombres.
+      </p>
+    </div>
+  </div>
+
+  <h3>Ejecutar el proyecto: <code>ng serve</code></h3>
+  <p>
+    <code>ng serve</code> compila la aplicación y abre un <strong>servidor local</strong>.
+    Por defecto la aplicación queda disponible en <code>http://localhost:4200/</code>.
+  </p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">ng serve                 # servidor en http://localhost:4200/
+ng serve --open          # abre el navegador automáticamente (alias: ng serve -o)
+ng serve --port 4500     # cambia el puerto &rarr; http://localhost:4500/</code></pre>
+  </figure>
+
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Opción</th><th>Abreviatura</th><th>Efecto</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--open</code></td><td><code>-o</code></td><td>Abre el navegador al terminar la compilación.</td></tr>
+          <tr><td><code>--port</code></td><td><code>-p</code></td><td>Fija el puerto (por defecto 4200).</td></tr>
+          <tr><td><code>--host</code></td><td>—</td><td>Interfaz de red; <code>0.0.0.0</code> permite acceso desde otros equipos.</td></tr>
+          <tr><td><code>--hmr</code></td><td>—</td><td>Recarga en caliente conservando el estado.</td></tr>
+          <tr><td><code>--configuration</code></td><td><code>-c</code></td><td>Configuración de build (<code>development</code>, <code>production</code>).</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p>Combinando opciones y usando el script de npm:</p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">ng serve --open --port 4500
+npm start        # equivale a ng serve: usa el script definido en package.json</code></pre>
+  </figure>
+
+  <div class="note warn">
+    <span class="ico">⚠️</span>
+    <div class="body">
+      <span class="label">El servidor ocupa la terminal</span>
+      <p>
+        Mientras <code>ng serve</code> está en ejecución, esa terminal queda ocupada mostrando
+        la recompilación. Para escribir otros comandos se abre una segunda terminal o se detiene
+        el servidor con <kbd>Ctrl</kbd> + <kbd>C</kbd>.
+      </p>
+    </div>
+  </div>
+
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">flujo completo desde cero</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">node -v                                  # 1. comprobar Node
+npm -v                                   # 2. comprobar npm
+npm install -g @angular/cli              # 3. instalar Angular CLI
+cd ~/proyectos                           # 4. navegar a la carpeta deseada
+ng new PrimerProyecto                    # 5. crear el proyecto
+cd PrimerProyecto                        # 6. entrar en el proyecto
+ng serve --open                          # 7. ejecutar y abrir el navegador</code></pre>
+  </figure>
+
+  <div class="note ok">
+    <span class="ico">✅</span>
+    <div class="body">
+      <span class="label">Checklist del bloque 2</span>
+      <p>
+        Proyecto creado con standalone por defecto · servidor levantado en
+        <code>http://localhost:4200/</code> · conoces <code>--open</code> y <code>--port 4500</code>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3. COMPONENTES ==================== -->
+<section class="sec" id="componentes">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">3</span> Piezas de la interfaz</div>
+    <h2>Componentes</h2>
+    <p class="intro">
+      Un componente es la unidad básica de una aplicación Angular: une una <strong>clase
+      TypeScript</strong> (datos y lógica), una <strong>plantilla HTML</strong> (vista) y unos
+      <strong>estilos</strong>. Toda aplicación Angular es un árbol de componentes.
+    </p>
+  </div>
+
+  <h3>Creación de componentes</h3>
+  <p>Se genera un componente con <code>ng generate component</code> y el nombre:</p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal (dentro del proyecto)</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">ng generate component usuario
+
+# forma abreviada
+ng g c usuario</code></pre>
+  </figure>
+  <p>El CLI genera una carpeta <code>usuario/</code> con los archivos necesarios:</p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Archivo generado</th><th>Contenido</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>usuario.ts</code></td><td>Clase del componente con el decorador <code>@Component</code>.</td></tr>
+          <tr><td><code>usuario.html</code></td><td>Plantilla (template) del componente.</td></tr>
+          <tr><td><code>usuario.css</code></td><td>Estilos encapsulados del componente.</td></tr>
+          <tr><td><code>usuario.spec.ts</code></td><td>Prueba unitaria generada automáticamente.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Opción de <code>ng g c</code></th><th>Efecto</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--skip-tests</code></td><td>No genera el archivo <code>.spec.ts</code>.</td></tr>
+          <tr><td><code>--inline-template</code></td><td>La plantilla va dentro del <code>.ts</code>, sin <code>.html</code>.</td></tr>
+          <tr><td><code>--inline-style</code></td><td>Los estilos van dentro del <code>.ts</code>, sin <code>.css</code>.</td></tr>
+          <tr><td><code>--prefix</code></td><td>Cambia el prefijo del selector (<code>app-</code> por defecto).</td></tr>
+          <tr><td><code>--dry-run</code></td><td>Muestra qué crearía sin escribir archivos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Estructura de un componente</h3>
+  <p>Todo componente se declara con el <strong>decorador <code>@Component</code></strong>, que recibe un objeto de metadatos:</p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Metadato</th><th>Para qué sirve</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>selector</code></td>
+            <td>Nombre de la etiqueta HTML con la que se usa el componente: <code>app-usuario</code>.</td>
+          </tr>
+          <tr>
+            <td><code>templateUrl</code></td>
+            <td>Ruta del archivo HTML de la plantilla.</td>
+          </tr>
+          <tr>
+            <td><code>styleUrl</code></td>
+            <td>Ruta del archivo de estilos (en singular desde Angular 17; <code>styleUrls</code> era el arreglo anterior).</td>
+          </tr>
+          <tr>
+            <td><code>imports</code></td>
+            <td>Componentes, directivas, pipes o módulos que la plantilla necesita. Propio de los componentes standalone.</td>
+          </tr>
+          <tr>
+            <td><code>template</code> / <code>styles</code></td>
+            <td>Alternativa en línea, sin archivos externos (útil en componentes pequeños).</td>
+          </tr>
+          <tr>
+            <td><code>standalone</code></td>
+            <td>Ya no es necesario declararlo: desde Angular 19 los componentes son standalone por defecto.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/usuario/usuario.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-usuario',
+  imports: [],
+  templateUrl: './usuario.html',
+  styleUrl: './usuario.css'
+})
+export class Usuario {
+}</code></pre>
+  </figure>
+
+  <p>Añadiendo estado y lógica propios del componente:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/usuario/usuario.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-usuario',
+  imports: [],
+  templateUrl: './usuario.html',
+  styleUrl: './usuario.css'
+})
+export class Usuario {
+  nombre = 'Ana';
+  edad = 28;
+  activo = true;
+
+  saludar(): string {
+    return `Hola, ${this.nombre}`;
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/usuario/usuario.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;div class="usuario"&gt;
+  &lt;h2&gt;{{ nombre }}&lt;/h2&gt;
+  &lt;p&gt;Edad: {{ edad }}&lt;/p&gt;
+  &lt;p&gt;{{ saludar() }}&lt;/p&gt;
+
+  @if (activo) {
+    &lt;span class="badge"&gt;Activo&lt;/span&gt;
+  }
+&lt;/div&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="css">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/usuario/usuario.css</span>
+      <span class="lang">css</span>
+    </figcaption>
+<pre><code class="lang-css">.usuario {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.badge {
+  background: #e8f7ee;
+  color: #0f8a53;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}</code></pre>
+  </figure>
+
+  <h3>Uso de otros componentes</h3>
+  <p>
+    En Angular moderno los componentes <strong>se importan directamente</strong> en la propiedad
+    <code>imports</code> del componente que los va a usar. No hace falta ningún <code>NgModule</code>.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { Usuario } from './usuario/usuario';
+
+@Component({
+  selector: 'app-root',
+  imports: [Usuario],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;h1&gt;Mi primer proyecto&lt;/h1&gt;
+&lt;app-usuario&gt;&lt;/app-usuario&gt;</code></pre>
+  </figure>
+
+  <div class="note danger">
+    <span class="ico">⛔</span>
+    <div class="body">
+      <span class="label">Error común</span>
+      <p>
+        Si se usa <code>&lt;app-usuario&gt;</code> sin añadirlo a <code>imports</code>, Angular
+        muestra el error <code>'app-usuario' is not a known element</code>. La solución no es
+        tocar <code>declarations</code> (no existe en standalone), sino <strong>importar la clase</strong>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Componentes standalone</h3>
+  <ul>
+    <li>Desde <strong>Angular 19</strong> los componentes son <strong>standalone por defecto</strong>.</li>
+    <li>Un componente standalone <strong>no necesita declararse dentro de un <code>NgModule</code></strong>.</li>
+    <li>Puede importar directamente otros componentes, directivas, pipes o módulos mediante la propiedad <code>imports</code>.</li>
+    <li>Se puede usar en cualquier plantilla simplemente importándolo donde se necesita.</li>
+  </ul>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">standalone: importar lo que la plantilla usa</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { Usuario } from './usuario/usuario';
+
+@Component({
+  selector: 'app-panel',
+  imports: [FormsModule, RouterLink, Usuario], // solo lo que la plantilla necesita
+  templateUrl: './panel.html'
+})
+export class Panel {
+}</code></pre>
+  </figure>
+  <div class="note tip">
+    <span class="ico">💡</span>
+    <div class="body">
+      <span class="label">Truco de examen</span>
+      <p>
+        Regla mental: <strong>lo que la plantilla usa, va en <code>imports</code></strong>.
+        Si la plantilla tiene <code>[(ngModel)]</code> → <code>FormsModule</code>;
+        si tiene <code>*ngIf</code> → <code>NgIf</code> o <code>CommonModule</code>;
+        si tiene <code>&lt;router-outlet&gt;</code> → <code>RouterOutlet</code>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Ampliación: ciclo de vida</h3>
+  <p>
+    Angular avisa al componente en momentos clave. Métodos que conviene reconocer:
+  </p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Método</th><th>Cuándo se ejecuta</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>constructor()</code></td><td>Al crear la instancia; se usa para inyectar dependencias.</td></tr>
+          <tr><td><code>ngOnInit()</code></td><td>Una vez tras inicializar los inputs; ideal para cargar datos.</td></tr>
+          <tr><td><code>ngOnChanges()</code></td><td>Cada vez que cambia un <code>@Input()</code> clásico.</td></tr>
+          <tr><td><code>ngOnDestroy()</code></td><td>Justo antes de destruirse; se usa para cancelar suscripciones.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4. BINDING ==================== -->
+<section class="sec" id="binding">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">4</span> Datos entre clase y vista</div>
+    <h2>Binding</h2>
+    <p class="intro">
+      El <strong>binding</strong> conecta los datos del componente con la vista: permite que los
+      datos del componente se representen o modifiquen desde el HTML. Angular actualiza la
+      interfaz cuando cambian los datos que utiliza la plantilla.
+    </p>
+  </div>
+
+  <h3>Los cuatro tipos de binding</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Tipo</th><th>Sintaxis</th><th>Dirección</th><th>Ejemplo</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Interpolation</td>
+            <td><code>{{ expresión }}</code></td>
+            <td>Componente → Vista</td>
+            <td><code>{{ nombre }}</code></td>
+          </tr>
+          <tr>
+            <td>Property Binding</td>
+            <td><code>[propiedad]="expresión"</code></td>
+            <td>Componente → Vista (DOM)</td>
+            <td><code>[src]="imagenUrl"</code></td>
+          </tr>
+          <tr>
+            <td>Event Binding</td>
+            <td><code>(evento)="método()"</code></td>
+            <td>Vista → Componente</td>
+            <td><code>(click)="saludar()"</code></td>
+          </tr>
+          <tr>
+            <td>Two-way Binding</td>
+            <td><code>[(propiedad)]="valor"</code></td>
+            <td>Ambas direcciones</td>
+            <td><code>[(ngModel)]="nombre"</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Interpolation (Interpolación)</h3>
+  <p>
+    <strong>Descripción:</strong> enlace unidireccional que muestra datos en la vista. Se escribe
+    con dobles llaves y admite expresiones de TypeScript (operaciones, ternarios, llamadas a métodos).
+  </p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">interpolation.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;p&gt;{{ nombre }}&lt;/p&gt;
+
+&lt;p&gt;Total: {{ precio * cantidad }}&lt;/p&gt;
+&lt;p&gt;{{ activo ? 'Disponible' : 'No disponible' }}&lt;/p&gt;
+&lt;p&gt;{{ nombre.toUpperCase() }}&lt;/p&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">interpolation.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">export class Ejemplo {
+  nombre = 'Ana';
+  precio = 10;
+  cantidad = 3;
+  activo = true;
+}</code></pre>
+  </figure>
+  <div class="note warn">
+    <span class="ico">⚠️</span>
+    <div class="body">
+      <span class="label">Qué no va dentro de <code>{{ }}</code></span>
+      <p>
+        Solo <strong>expresiones</strong>, no sentencias: no se permite <code>{{ let x = 1 }}</code>,
+        ni <code>if</code>, ni <code>new Fecha()</code>, ni asignaciones como <code>{{ contador++ }}</code>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Property Binding</h3>
+  <p>
+    <strong>Descripción:</strong> asigna valores del componente a propiedades del DOM o de otros
+    componentes. Se usan corchetes alrededor del nombre de la propiedad.
+  </p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">property-binding.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;img [src]="imagenUrl" [alt]="descripcion"&gt;
+
+&lt;button [disabled]="deshabilitado"&gt;Enviar&lt;/button&gt;
+
+&lt;input [value]="nombre"&gt;
+
+&lt;div [class.activo]="esActivo"&gt;Estado&lt;/div&gt;
+&lt;p [style.color]="colorTexto"&gt;Texto coloreado&lt;/p&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">property-binding.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">export class Ejemplo {
+  imagenUrl = 'assets/usuario.png';
+  descripcion = 'Foto del usuario';
+  deshabilitado = false;
+  nombre = 'Ana';
+  esActivo = true;
+  colorTexto = 'tomato';
+}</code></pre>
+  </figure>
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Atributo vs propiedad</span>
+      <p>
+        <code>[src]</code> escribe en la <strong>propiedad del DOM</strong>, que es la que el
+        navegador usa de verdad. Si se escribe <code>src="{{ imagenUrl }}"</code> también
+        funciona, pero lo idiomático y recomendado es el property binding con corchetes.
+      </p>
+    </div>
+  </div>
+
+  <h3>Event Binding</h3>
+  <p>
+    <strong>Descripción:</strong> escucha eventos y ejecuta funciones. El nombre del evento va
+    entre paréntesis. Se puede recibir el evento con <code>$event</code>.
+  </p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">event-binding.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;button (click)="saludar()"&gt;Haz clic&lt;/button&gt;
+
+&lt;button (click)="incrementar(2)"&gt;Sumar 2&lt;/button&gt;
+
+&lt;input (input)="actualizarNombre($event)" placeholder="Escribe tu nombre"&gt;
+
+&lt;form (ngSubmit)="guardar()"&gt;
+  &lt;button type="submit"&gt;Guardar&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">event-binding.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">export class Ejemplo {
+  contador = 0;
+  nombre = '';
+
+  saludar() {
+    alert('¡Hola!');
+  }
+
+  incrementar(cantidad: number) {
+    this.contador += cantidad;
+  }
+
+  actualizarNombre(evento: Event) {
+    const input = evento.target as HTMLInputElement;
+    this.nombre = input.value;
+  }
+}</code></pre>
+  </figure>
+
+  <h3>Two-way Binding</h3>
+  <p>
+    <strong>Descripción:</strong> sincronización de datos en ambas direcciones. La sintaxis
+    <code>[()]</code> combina property binding y event binding (se le llama «banana in a box»).
+  </p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">two-way-binding.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;label for="nombre"&gt;Nombre:&lt;/label&gt;
+&lt;input id="nombre" [(ngModel)]="nombre"&gt;
+
+&lt;p&gt;Escribiste: {{ nombre }}&lt;/p&gt;</code></pre>
+  </figure>
+  <p>
+    Para utilizar <code>ngModel</code> en un componente standalone es necesario importar
+    <strong><code>FormsModule</code></strong>:
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">two-way-binding.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-ejemplo',
+  imports: [FormsModule],
+  templateUrl: './ejemplo.html'
+})
+export class Ejemplo {
+  nombre = 'Ana';
+}</code></pre>
+  </figure>
+
+  <div class="note danger">
+    <span class="ico">⛔</span>
+    <div class="body">
+      <span class="label">Error común</span>
+      <p>
+        <code>Can't bind to 'ngModel' since it isn't a known property of 'input'</code> significa
+        que falta <code>FormsModule</code> en el <code>imports</code> del componente.
+      </p>
+    </div>
+  </div>
+
+  <h3>Tabla resumen</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Quiero…</th><th>Uso</th><th>Requiere importar</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Mostrar un valor</td><td><code>{{ valor }}</code></td><td>Nada</td></tr>
+          <tr><td>Asignar a una propiedad HTML</td><td><code>[propiedad]="valor"</code></td><td>Nada</td></tr>
+          <tr><td>Reaccionar a un clic</td><td><code>(click)="metodo()"</code></td><td>Nada</td></tr>
+          <tr><td>Editar un valor desde un input</td><td><code>[(ngModel)]="valor"</code></td><td><code>FormsModule</code></td></tr>
+          <tr><td>Enviar un dato a un componente hijo</td><td><code>[entrada]="valor"</code></td><td>—</td></tr>
+          <tr><td>Escuchar un evento de un hijo</td><td><code>(salida)="metodo($event)"</code></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 5. SIGNALS ==================== -->
+<section class="sec" id="signals">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">5</span> Estado reactivo</div>
+    <h2>Signals</h2>
+    <p class="intro">
+      Los Signals son el <strong>sistema reactivo</strong> de Angular para gestionar estado.
+      Un signal almacena un valor y Angular puede detectar qué partes de la aplicación dependen
+      de ese valor. Cuando cambia el signal, Angular actualiza automáticamente los consumidores
+      que dependen de él.
+    </p>
+  </div>
+
+  <h3>¿Qué son los Signals?</h3>
+  <ul>
+    <li>Un signal es una <strong>función que envuelve un valor</strong> y avisa cuando cambia.</li>
+    <li>Se leen <strong>llamándolos como una función</strong>: <code>contador()</code>, con paréntesis.</li>
+    <li>Angular registra qué plantillas y qué <code>computed</code>/<code>effect</code> consumen cada signal.</li>
+    <li>El seguimiento es <strong>granular</strong>: solo se actualiza lo que depende del signal que cambió.</li>
+  </ul>
+
+  <h3>Crear un Signal</h3>
+  <p>Se crea utilizando <code>signal()</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">crear-signal.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { signal } from '@angular/core';
+
+contador = signal(0);</code></pre>
+  </figure>
+  <p>Para obtener su valor se invoca con paréntesis:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">leer-signal.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">console.log(this.contador());</code></pre>
+  </figure>
+  <p>En el HTML también se llama:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">leer-signal.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;p&gt;{{ contador() }}&lt;/p&gt;</code></pre>
+  </figure>
+
+  <h3>Modificar un Signal con <code>set()</code></h3>
+  <p><code>set()</code> sustituye directamente el valor actual.</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">set.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">contador = signal(0);
+
+reiniciar() {
+  this.contador.set(0);
+}</code></pre>
+  </figure>
+
+  <h3>Modificar un Signal con <code>update()</code></h3>
+  <p><code>update()</code> calcula el nuevo valor a partir del valor anterior.</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">update.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">incrementar() {
+  this.contador.update(valor =&gt; valor + 1);
+}
+
+decrementar() {
+  this.contador.update(valor =&gt; valor - 1);
+}</code></pre>
+  </figure>
+  <div class="note tip">
+    <span class="ico">💡</span>
+    <div class="body">
+      <span class="label">Diferencia clave</span>
+      <p>
+        <code>set(x)</code> → «el valor pasa a ser <code>x</code>».<br>
+        <code>update(fn)</code> → «el valor pasa a ser <code>fn(valorActual)</code>».
+        Si el nuevo valor es igual al anterior, el signal <strong>no notifica</strong> el cambio.
+      </p>
+    </div>
+  </div>
+
+  <h3>Signals calculados con <code>computed()</code></h3>
+  <p>
+    <code>computed()</code> permite crear un valor que depende de uno o varios signals.
+    El valor calculado se actualiza cuando cambian sus dependencias.
+    Un <code>computed</code> es de <strong>solo lectura</strong>.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">computed.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { computed, signal } from '@angular/core';
+
+contador = signal(0);
+
+doble = computed(() =&gt; this.contador() * 2);</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">computed.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;p&gt;Contador: {{ contador() }}&lt;/p&gt;
+&lt;p&gt;Doble: {{ doble() }}&lt;/p&gt;</code></pre>
+  </figure>
+  <ul>
+    <li>Es <strong>perezoso</strong>: solo recalcula cuando se lee y alguna dependencia cambió.</li>
+    <li>Es <strong>memorizado</strong>: si se lee varias veces sin cambios, devuelve el valor guardado.</li>
+    <li>No se le puede hacer <code>set()</code> ni <code>update()</code>: se deriva, no se asigna.</li>
+  </ul>
+
+  <h3><code>effect()</code></h3>
+  <p>
+    <code>effect()</code> permite ejecutar una acción cuando cambian los signals que utiliza.
+    Se utiliza principalmente para <strong>efectos secundarios</strong>, por ejemplo:
+  </p>
+  <ul>
+    <li>Registrar información en consola o en un servicio de logs.</li>
+    <li>Guardar un valor en <code>localStorage</code>.</li>
+    <li>Sincronizar con APIs del navegador (título de la página, <code>canvas</code>, etc.).</li>
+  </ul>
+  <p>
+    <strong>No debe utilizarse como sustituto de <code>computed()</code></strong> para calcular
+    valores derivados.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">effect.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { effect, signal } from '@angular/core';
+
+contador = signal(0);
+
+constructor() {
+  effect(() =&gt; {
+    console.log('El contador vale:', this.contador());
+  });
+}</code></pre>
+  </figure>
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Detalles de <code>effect()</code></span>
+      <p>
+        Se ejecuta al menos una vez al crearse y después cada vez que cambia un signal leído
+        dentro. Debe crearse en un <em>contexto de inyección</em> (constructor o inicializador de
+        campo). Angular lo destruye solo cuando muere el componente.
+      </p>
+    </div>
+  </div>
+
+  <h3>Ejemplo completo: contador con Signals</h3>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/contador/contador.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, computed, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-contador',
+  imports: [],
+  templateUrl: './contador.html',
+  styleUrl: './contador.css'
+})
+export class Contador {
+  contador = signal(0);
+
+  doble = computed(() =&gt; this.contador() * 2);
+
+  incrementar() {
+    this.contador.update(valor =&gt; valor + 1);
+  }
+
+  decrementar() {
+    this.contador.update(valor =&gt; valor - 1);
+  }
+
+  reiniciar() {
+    this.contador.set(0);
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/contador/contador.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;h2&gt;Contador&lt;/h2&gt;
+
+&lt;p&gt;Valor: {{ contador() }}&lt;/p&gt;
+&lt;p&gt;Doble: {{ doble() }}&lt;/p&gt;
+
+&lt;button (click)="incrementar()"&gt;+&lt;/button&gt;
+&lt;button (click)="decrementar()"&gt;-&lt;/button&gt;
+&lt;button (click)="reiniciar()"&gt;Reiniciar&lt;/button&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="css">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/contador/contador.css</span>
+      <span class="lang">css</span>
+    </figcaption>
+<pre><code class="lang-css">:host {
+  display: block;
+  max-width: 340px;
+}
+
+button {
+  margin-right: 6px;
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #f2f2f7;
+}</code></pre>
+  </figure>
+
+  <h3>Resumen de la API de Signals</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Función</th><th>Qué hace</th><th>Ejemplo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>signal(valor)</code></td><td>Crea un estado reactivo.</td><td><code>contador = signal(0)</code></td></tr>
+          <tr><td><code>signal()</code></td><td>Obtiene el valor (se llama como función).</td><td><code>this.contador()</code></td></tr>
+          <tr><td><code>set(valor)</code></td><td>Asigna un nuevo valor.</td><td><code>this.contador.set(0)</code></td></tr>
+          <tr><td><code>update(fn)</code></td><td>Modifica el valor usando el valor anterior.</td><td><code>this.contador.update(v =&gt; v + 1)</code></td></tr>
+          <tr><td><code>computed()</code></td><td>Crea un valor derivado de solo lectura.</td><td><code>doble = computed(() =&gt; this.contador() * 2)</code></td></tr>
+          <tr><td><code>effect()</code></td><td>Ejecuta un efecto secundario al cambiar sus dependencias.</td><td><code>effect(() =&gt; console.log(this.contador()))</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note exam">
+    <span class="ico">🎯</span>
+    <div class="body">
+      <span class="label">Trampa de examen</span>
+      <p>
+        <code>computed</code> <strong>no</strong> se puede escribir, y un <code>effect</code>
+        <strong>no</strong> devuelve valores. Si la pregunta dice «valor derivado que se actualiza
+        solo» → <code>computed</code>; si dice «acción al cambiar un signal» → <code>effect</code>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Signals frente a propiedades normales</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th></th><th>Propiedad normal</th><th>Signal</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Lectura</td><td><code>this.valor</code></td><td><code>this.valor()</code></td></tr>
+          <tr><td>Asignación</td><td><code>this.valor = 1</code></td><td><code>this.valor.set(1)</code></td></tr>
+          <tr><td>Aviso de cambio</td><td>No hay aviso explícito.</td><td>Angular sabe exactamente quién depende.</td></tr>
+          <tr><td>Derivados</td><td>Se recalculan en cada ciclo.</td><td><code>computed</code> memoriza el resultado.</td></tr>
+          <tr><td>Uso en plantilla</td><td><code>{{ valor }}</code></td><td><code>{{ valor() }}</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 6. ESTRUCTURAS DE CONTROL ==================== -->
+<section class="sec" id="control">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">6</span> Plantillas dinámicas</div>
+    <h2>Estructuras de control</h2>
+    <p class="intro">
+      Angular incorpora bloques de control directamente en la sintaxis de plantillas:
+      <code>@if</code> para condiciones y <code>@for</code> para listas. No requieren importar
+      <code>CommonModule</code> y mejoran la claridad del código.
+    </p>
+  </div>
+
+  <h3><code>@if</code></h3>
+  <p>
+    Permite mostrar u ocultar contenido de forma condicional. Se usa para renderizar elementos
+    solo cuando una condición es verdadera.
+  </p>
+  <p><strong>Ejemplo básico:</strong></p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">if-basico.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@if (esVisible) {
+  &lt;div&gt;Este contenido es visible&lt;/div&gt;
+}</code></pre>
+  </figure>
+  <p>El bloque <code>&lt;div&gt;</code> se renderiza únicamente si la variable <code>esVisible</code> es verdadera.</p>
+
+  <p><strong>Ejemplo con <code>@else</code>:</strong></p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">if-else.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@if (esVisible) {
+  &lt;div&gt;Este contenido es visible&lt;/div&gt;
+} @else {
+  &lt;div&gt;Este contenido se muestra cuando esVisible es falso&lt;/div&gt;
+}</code></pre>
+  </figure>
+
+  <p>También admite <code>@else if</code> para encadenar condiciones:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">if-else-if.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@if (estado === 'cargando') {
+  &lt;p&gt;Cargando datos…&lt;/p&gt;
+} @else if (estado === 'error') {
+  &lt;p class="error"&gt;Se produjo un error.&lt;/p&gt;
+} @else {
+  &lt;p&gt;Datos listos.&lt;/p&gt;
+}</code></pre>
+  </figure>
+
+  <div class="note tip">
+    <span class="ico">💡</span>
+    <div class="body">
+      <span class="label">Ventaja frente a <code>*ngIf</code></span>
+      <p>
+        <code>@if</code> está integrado en el compilador de plantillas: no hay que importar nada,
+        no hay que usar <code>&lt;ng-template&gt;</code> para el <code>else</code> y el código queda
+        con una estructura de bloques legible.
+      </p>
+    </div>
+  </div>
+
+  <h3><code>@for</code></h3>
+  <p>
+    Se utiliza para iterar sobre colecciones o listas de elementos y permite generar contenido
+    dinámico en función de los datos del componente.
+  </p>
+  <p><strong>Ejemplo básico:</strong></p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">for-basico.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;ul&gt;
+  @for (item of lista; track $index) {
+    &lt;li&gt;{{ $index }} - {{ item }}&lt;/li&gt;
+  }
+&lt;/ul&gt;</code></pre>
+  </figure>
+  <ul>
+    <li><code>lista</code>: colección o arreglo definido en el componente.</li>
+    <li><code>$index</code>: índice actual del elemento dentro del bucle.</li>
+    <li><code>track</code>: indica a Angular cómo identificar cada elemento para optimizar el renderizado. Es <strong>obligatorio</strong>.</li>
+  </ul>
+
+  <p>Variables internas del bucle:</p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Variable</th><th>Significado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>$index</code></td><td>Posición del elemento actual (empieza en 0).</td></tr>
+          <tr><td><code>$first</code></td><td><code>true</code> si es el primer elemento.</td></tr>
+          <tr><td><code>$last</code></td><td><code>true</code> si es el último elemento.</td></tr>
+          <tr><td><code>$even</code></td><td><code>true</code> si el índice es par.</td></tr>
+          <tr><td><code>$odd</code></td><td><code>true</code> si el índice es impar.</td></tr>
+          <tr><td><code>$count</code></td><td>Número total de elementos de la colección.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p>Ejemplo usando varias variables internas:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">for-variables.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;ul&gt;
+  @for (tarea of tareas; track tarea.id) {
+    &lt;li [class.primera]="$first" [class.ultima]="$last"&gt;
+      {{ $index + 1 }} de {{ $count }} — {{ tarea.titulo }}
+      @if ($odd) { &lt;em&gt;(fila impar)&lt;/em&gt; }
+    &lt;/li&gt;
+  }
+&lt;/ul&gt;</code></pre>
+  </figure>
+
+  <h3>Elegir bien el <code>track</code></h3>
+  <p>
+    Para listas de objetos es preferible utilizar una propiedad única:
+  </p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">for-track-id.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@for (usuario of usuarios; track usuario.id) {
+  &lt;p&gt;{{ usuario.nombre }}&lt;/p&gt;
+}</code></pre>
+  </figure>
+  <p>Para colecciones estáticas se puede utilizar <code>track $index</code>:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">for-track-index.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@for (paso of pasos; track $index) {
+  &lt;li&gt;{{ paso }}&lt;/li&gt;
+}</code></pre>
+  </figure>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Colección</th><th><code>track</code> recomendado</th><th>Motivo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Objetos con identificador</td><td><code>track objeto.id</code></td><td>Angular reutiliza el nodo correcto al reordenar o insertar.</td></tr>
+          <tr><td>Lista estática de cadenas</td><td><code>track $index</code></td><td>No hay identidad propia; el orden no cambia.</td></tr>
+          <tr><td>Lista que se filtra o reordena</td><td><code>track objeto.id</code></td><td>Evita recrear todos los elementos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3><code>@empty</code></h3>
+  <p>Se muestra cuando la colección no tiene elementos:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">for-empty.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@for (usuario of usuarios; track usuario.id) {
+  &lt;p&gt;{{ usuario.nombre }}&lt;/p&gt;
+} @empty {
+  &lt;p&gt;No hay usuarios.&lt;/p&gt;
+}</code></pre>
+  </figure>
+
+  <p>Y se pueden anidar bloques sin problema:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">for-anidado.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@for (categoria of categorias; track categoria.id) {
+  &lt;h3&gt;{{ categoria.nombre }}&lt;/h3&gt;
+
+  &lt;ul&gt;
+    @for (producto of categoria.productos; track producto.id) {
+      &lt;li&gt;{{ producto.nombre }} — {{ producto.precio }} €&lt;/li&gt;
+    } @empty {
+      &lt;li&gt;Sin productos&lt;/li&gt;
+    }
+  &lt;/ul&gt;
+} @empty {
+  &lt;p&gt;No hay categorías.&lt;/p&gt;
+}</code></pre>
+  </figure>
+
+  <h3>Ampliación: <code>@let</code></h3>
+  <p>
+    <code>@let</code> declara una variable local dentro de la plantilla para no repetir expresiones:
+  </p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">let.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">@let total = carrito().length;
+@let vacio = total === 0;
+
+&lt;p&gt;{{ total }} artículo(s)&lt;/p&gt;
+
+@if (vacio) {
+  &lt;p&gt;El carrito está vacío.&lt;/p&gt;
+}</code></pre>
+  </figure>
+
+  <h3>Antiguas directivas estructurales</h3>
+  <p>
+    Antes de los bloques de control se usaban <strong>directivas estructurales</strong>, que
+    modifican la estructura del DOM. Siguen funcionando, pero en código nuevo se prefieren
+    <code>@if</code> y <code>@for</code>.
+  </p>
+
+  <h4><code>ngIf</code></h4>
+  <p>Renderizado condicional. Uso básico: muestra o esconde un elemento basado en una condición.</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">ngif.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;div *ngIf="esVisible"&gt;Este contenido es visible&lt;/div&gt;</code></pre>
+  </figure>
+  <p>Uso con <code>else</code>:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">ngif-else.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;div *ngIf="esVisible; else noVisible"&gt;
+  Este contenido es visible
+&lt;/div&gt;
+
+&lt;ng-template #noVisible&gt;
+  &lt;div&gt;Este contenido se muestra cuando esVisible es falso&lt;/div&gt;
+&lt;/ng-template&gt;</code></pre>
+  </figure>
+
+  <h4><code>ngFor</code></h4>
+  <p>Itera sobre listas y genera un elemento por cada ítem de la lista.</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">ngfor.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;ul&gt;
+  &lt;li *ngFor="let item of lista; let i = index"&gt;
+    {{ i }} - {{ item }}
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  </figure>
+  <p>
+    En este ejemplo, <code>lista</code> es un arreglo en el componente y <code>i</code> es el
+    índice del elemento actual. Otras variables disponibles: <code>first</code>,
+    <code>last</code>, <code>even</code>, <code>odd</code>.
+  </p>
+  <p>
+    En un componente standalone, estas directivas hay que importarlas. La forma rápida es
+    importar <code>CommonModule</code>, que las agrupa todas:
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">legacy-directivas.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-lista',
+  imports: [CommonModule], // aporta NgIf, NgFor, NgClass, DatePipe, etc.
+  templateUrl: './lista.html'
+})
+export class Lista {
+  esVisible = true;
+  lista = ['Ana', 'Luis', 'Marta'];
+}</code></pre>
+  </figure>
+
+  <p>Para listas grandes, <code>*ngFor</code> admite <code>trackBy</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">trackBy</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">trackPorId(index: number, usuario: Usuario): number {
+  return usuario.id;
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">trackBy.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;li *ngFor="let usuario of usuarios; trackBy: trackPorId"&gt;
+  {{ usuario.nombre }}
+&lt;/li&gt;</code></pre>
+  </figure>
+
+  <h3>Equivalencias: clásico y moderno</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Objetivo</th><th>Directiva clásica <span class="pill old">Clásico</span></th><th>Bloque moderno <span class="pill new">Moderno</span></th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Condición simple</td><td><code>*ngIf="cond"</code></td><td><code>@if (cond) { … }</code></td></tr>
+          <tr><td>Condición con alternativa</td><td><code>*ngIf="cond; else tpl"</code> + <code>&lt;ng-template #tpl&gt;</code></td><td><code>@if (cond) { … } @else { … }</code></td></tr>
+          <tr><td>Tercera opción</td><td>Anidar <code>*ngIf</code></td><td><code>@else if (cond2)</code></td></tr>
+          <tr><td>Recorrer lista</td><td><code>*ngFor="let i of lista"</code></td><td><code>@for (i of lista; track …)</code></td></tr>
+          <tr><td>Índice</td><td><code>let i = index</code></td><td><code>$index</code></td></tr>
+          <tr><td>Primero / último</td><td><code>first</code> / <code>last</code></td><td><code>$first</code> / <code>$last</code></td></tr>
+          <tr><td>Lista vacía</td><td><code>*ngIf="lista.length === 0"</code></td><td><code>@empty { … }</code></td></tr>
+          <tr><td>Optimización</td><td><code>trackBy: fn</code></td><td><code>track item.id</code></td></tr>
+          <tr><td>Import necesario</td><td><code>CommonModule</code> / <code>NgIf</code> / <code>NgFor</code></td><td>Ninguno</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="note warn">
+    <span class="ico">⚠️</span>
+    <div class="body">
+      <span class="label">No se pueden mezclar</span>
+      <p>
+        Ambos estilos pueden convivir en una plantilla, pero no deben mezclarse en la misma
+        etiqueta: no se puede aplicar <code>*ngIf</code> y <code>@if</code> a la vez sobre el mismo
+        elemento. Además, <code>@for</code> exige siempre <code>track</code>: olvidarlo produce un
+        error de compilación.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 7. ROUTING ==================== -->
+<section class="sec" id="routing">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">7</span> Navegación</div>
+    <h2>Routing</h2>
+    <p class="intro">
+      El router de Angular permite la navegación entre componentes dentro de una aplicación
+      Angular SPA: usa la URL del navegador para determinar qué componente mostrar, sin recargar
+      la página. En aplicaciones modernas puede configurarse sin necesidad de un
+      <code>AppModule</code>.
+    </p>
+  </div>
+
+  <h3>Elementos principales</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Elemento</th><th>Función</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Routes</code></td><td>Arreglo que asocia rutas (<code>path</code>) con componentes.</td></tr>
+          <tr><td><code>RouterOutlet</code></td><td>Área donde se cargan los componentes según la ruta activa.</td></tr>
+          <tr><td><code>RouterLink</code></td><td>Permite navegar sin recargar la página.</td></tr>
+          <tr><td><code>ActivatedRoute</code></td><td>Obtiene información de la ruta activa (parámetros, datos).</td></tr>
+          <tr><td><code>Router</code></td><td>Permite navegar de forma programática desde la clase.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Configuración básica</h3>
+  <p>Las rutas suelen definirse en <code>app.routes.ts</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.routes.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Routes } from '@angular/router';
+import { Inicio } from './inicio/inicio';
+import { Usuario } from './usuario/usuario';
+
+export const routes: Routes = [
+  { path: '', component: Inicio },
+  { path: 'usuario', component: Usuario }
+];</code></pre>
+  </figure>
+  <p>
+    El arreglo debe registrarse en la aplicación con <code>provideRouter</code>. El CLI ya lo
+    deja preparado en <code>app.config.ts</code>:
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.config.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes)
+  ]
+};</code></pre>
+  </figure>
+
+  <p>En el componente principal se importa <code>RouterOutlet</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.html'
+})
+export class App {
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+  </figure>
+
+  <p>Para navegar mediante enlaces se utiliza <code>RouterLink</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">menu.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
+@Component({
+  selector: 'app-menu',
+  imports: [RouterLink, RouterLinkActive],
+  templateUrl: './menu.html'
+})
+export class Menu {
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">menu.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;nav&gt;
+  &lt;a routerLink="/" routerLinkActive="activo"&gt;Inicio&lt;/a&gt;
+  &lt;a routerLink="/usuario" routerLinkActive="activo"&gt;Usuario&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+  </figure>
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label"><code>routerLink</code> frente a <code>href</code></span>
+      <p>
+        <code>routerLink</code> navega por el router (sin recargar); <code>href</code> provoca una
+        petición al servidor y reinicia la aplicación. En una SPA se usa <code>routerLink</code>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Rutas avanzadas</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Patrón</th><th>Qué hace</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>usuario/:id</code></td><td>Ruta con parámetro obligatorio; se lee con <code>ActivatedRoute</code>.</td></tr>
+          <tr><td><code>redirectTo</code></td><td>Redirige a otra ruta (normalmente con <code>pathMatch: 'full'</code>).</td></tr>
+          <tr><td><code>children</code></td><td>Rutas hijas (anidadas), que se pintan en el <code>router-outlet</code> del padre.</td></tr>
+          <tr><td><code>**</code></td><td>Ruta comodín: captura cualquier URL no encontrada (404).</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">app.routes.ts · rutas avanzadas</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Routes } from '@angular/router';
+import { Inicio } from './inicio/inicio';
+import { Usuario } from './usuario/usuario';
+import { UsuarioDetalle } from './usuario-detalle/usuario-detalle';
+import { Admin } from './admin/admin';
+import { Perfil } from './admin/perfil/perfil';
+import { NoEncontrado } from './no-encontrado/no-encontrado';
+
+export const routes: Routes = [
+  { path: '', component: Inicio, title: 'Inicio' },
+  { path: 'usuario', component: Usuario },
+  { path: 'usuario/:id', component: UsuarioDetalle },
+  { path: 'inicio', redirectTo: '', pathMatch: 'full' },
+
+  {
+    path: 'admin',
+    component: Admin,
+    children: [
+      { path: '', component: Perfil },
+      { path: 'perfil', component: Perfil }
+    ]
+  },
+
+  // comodín: siempre al final
+  { path: '**', component: NoEncontrado }
+];</code></pre>
+  </figure>
+
+  <h4>Leer un parámetro de ruta</h4>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">usuario-detalle.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-usuario-detalle',
+  templateUrl: './usuario-detalle.html'
+})
+export class UsuarioDetalle {
+  private route = inject(ActivatedRoute);
+
+  // Lectura puntual (al crear el componente)
+  id = this.route.snapshot.paramMap.get('id');
+}</code></pre>
+  </figure>
+  <div class="note tip">
+    <span class="ico">💡</span>
+    <div class="body">
+      <span class="label">Si solo cambia el parámetro</span>
+      <p>
+        Al navegar de <code>/usuario/1</code> a <code>/usuario/2</code> el componente se reutiliza
+        y <code>snapshot</code> no se actualiza. En ese caso se observa
+        <code>route.paramMap</code> y se usa un <code>signal</code> o <code>toSignal</code>.
+      </p>
+    </div>
+  </div>
+
+  <h3>Navegación programática</h3>
+  <p>Usando el servicio <code>Router</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">navegacion.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-ejemplo',
+  templateUrl: './ejemplo.html'
+})
+export class Ejemplo {
+  private router = inject(Router);
+
+  irAUsuario() {
+    this.router.navigate(['/usuario']);
+  }
+
+  irADetalle(id: number) {
+    this.router.navigate(['/usuario', id]);
+  }
+
+  volver() {
+    this.router.navigateByUrl('/');
+  }
+}</code></pre>
+  </figure>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Método</th><th>Recibe</th><th>Ejemplo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>router.navigate()</code></td><td>Arreglo de segmentos</td><td><code>navigate(['/usuario', id])</code></td></tr>
+          <tr><td><code>router.navigateByUrl()</code></td><td>Cadena de URL</td><td><code>navigateByUrl('/usuario/7')</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Guardas de ruta (Route Guards)</h3>
+  <p>
+    Controlan el acceso o la selección de rutas. En Angular moderno se recomienda utilizar
+    <strong>guards funcionales</strong> (funciones, no clases).
+  </p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Tipo</th><th>Cuándo se ejecuta</th><th>Uso típico</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>CanActivate</code></td><td>Antes de activar una ruta.</td><td>Comprobar sesión iniciada.</td></tr>
+          <tr><td><code>CanActivateChild</code></td><td>Antes de activar rutas hijas.</td><td>Proteger toda una sección.</td></tr>
+          <tr><td><code>CanDeactivate</code></td><td>Antes de salir de una ruta.</td><td>Avisar de cambios sin guardar.</td></tr>
+          <tr><td><code>CanMatch</code></td><td>Antes de decidir si la ruta puede cargarse.</td><td>Sustituye a <code>CanLoad</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="note warn">
+    <span class="ico">⚠️</span>
+    <div class="body">
+      <span class="label">Deprecado</span>
+      <p>
+        <code>CanLoad</code> está deprecado y ha sido sustituido por <code>CanMatch</code>
+        <span class="pill dep">Deprecado</span>.
+      </p>
+    </div>
+  </div>
+
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">auth.guard.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from './auth.service';
+
+export const authGuard: CanActivateFn = () =&gt; {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (auth.estaAutenticado()) {
+    return true;
+  }
+
+  // alternativa: devolver un UrlTree redirige sin usar navigate()
+  return router.createUrlTree(['/login']);
+};</code></pre>
+  </figure>
+  <p>Aplicarlo a una ruta:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">app.routes.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">{
+  path: 'privado',
+  component: Privado,
+  canActivate: [authGuard]
+}</code></pre>
+  </figure>
+  <p>Un guard puede devolver un <code>boolean</code>, un <code>UrlTree</code>, un <code>Promise</code> o un <code>Observable</code> de esos tipos.</p>
+
+  <h3>Lazy Loading</h3>
+  <p>
+    Carga partes de la aplicación bajo demanda para mejorar el rendimiento: el código no se
+    descarga hasta que se navega a esa ruta. Con componentes standalone puede utilizarse
+    <code>loadComponent</code>.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">app.routes.ts · carga diferida</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">{
+  path: 'usuarios',
+  loadComponent: () =&gt;
+    import('./usuarios/usuarios').then(m =&gt; m.Usuarios)
+}</code></pre>
+  </figure>
+  <p>Para cargar un conjunto de rutas hijas se usa <code>loadChildren</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">app.routes.ts · loadChildren</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">{
+  path: 'admin',
+  loadChildren: () =&gt; import('./admin/admin.routes').then(m =&gt; m.ADMIN_ROUTES)
+}</code></pre>
+  </figure>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Carga</th><th>Propiedad</th><th>Cuándo se usa</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Ansiosa (eager)</td><td><code>component: X</code></td><td>Vista principal, siempre necesaria.</td></tr>
+          <tr><td>Diferida de componente</td><td><code>loadComponent</code></td><td>Ruta independiente con un componente standalone.</td></tr>
+          <tr><td>Diferida de rutas</td><td><code>loadChildren</code></td><td>Sección completa con sus propias rutas.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 8. COMUNICACIÓN ==================== -->
+<section class="sec" id="comunicacion">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">8</span> Padre e hijo</div>
+    <h2>Comunicación entre componentes</h2>
+    <p class="intro">
+      Cuando un componente contiene a otro, se establece una relación padre → hijo. Los datos
+      bajan al hijo mediante <strong>inputs</strong> y los avisos suben al padre mediante
+      <strong>outputs</strong>.
+    </p>
+  </div>
+
+  <div class="card plain" style="text-align:center; font-size:.92rem">
+    <strong>Padre</strong>
+    <span style="color:var(--brand); font-weight:700; margin:0 10px">── [input] ──▶</span>
+    <strong>Hijo</strong>
+    <br>
+    <strong>Padre</strong>
+    <span style="color:var(--brand-2); font-weight:700; margin:0 10px">◀── (output) ──</span>
+    <strong>Hijo</strong>
+  </div>
+
+  <h3>Padre → Hijo con la API moderna: <code>input()</code></h3>
+  <p>
+    En Angular moderno se recomienda la API basada en Signals <code>input()</code>.
+    Permite que el componente hijo reciba datos del componente padre.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/hijo/hijo.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, input } from '@angular/core';
+
+@Component({
+  selector: 'app-hijo',
+  template: `&lt;p&gt;{{ mensaje() }}&lt;/p&gt;`
+})
+export class Hijo {
+  mensaje = input('');
+}</code></pre>
+  </figure>
+  <p>El padre envía el dato mediante property binding:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;app-hijo [mensaje]="'Hola desde el padre'"&gt;&lt;/app-hijo&gt;</code></pre>
+  </figure>
+  <p>También pueden crearse inputs obligatorios:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">input.required</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">mensaje = input.required&lt;string&gt;();</code></pre>
+  </figure>
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Un input es un signal</span>
+      <p>
+        Como <code>input()</code> devuelve un signal, se lee con <code>mensaje()</code> y puede
+        usarse dentro de un <code>computed</code> o un <code>effect</code>. No se puede escribir:
+        su valor lo pone el padre.
+      </p>
+    </div>
+  </div>
+
+  <h3>Padre → Hijo con la API clásica: <code>@Input()</code></h3>
+  <p>
+    <code>@Input()</code> sigue siendo compatible y aparece en muchos proyectos. Permite que el
+    componente hijo reciba datos del componente padre; se usa para pasar propiedades o valores.
+  </p>
+  <p>El hijo declara la propiedad con:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">@Input</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">@Input() nombrePropiedad: tipo;</code></pre>
+  </figure>
+  <p>
+    El padre le envía el dato mediante property binding:
+    <code>&lt;app-hijo [dato]="valorPadre"&gt;&lt;/app-hijo&gt;</code>
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">hijo.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-hijo',
+  template: `&lt;p&gt;{{ mensaje }}&lt;/p&gt;`
+})
+export class Hijo {
+  @Input() mensaje!: string;
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">padre.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;app-hijo [mensaje]="'Hola desde el padre'"&gt;&lt;/app-hijo&gt;</code></pre>
+  </figure>
+
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th></th><th><code>input()</code> <span class="pill new">Moderno</span></th><th><code>@Input()</code> <span class="pill old">Clásico</span></th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Lectura en la clase</td><td><code>mensaje()</code></td><td><code>this.mensaje</code></td></tr>
+          <tr><td>Obligatorio</td><td><code>input.required&lt;T&gt;()</code></td><td><code>@Input({ required: true })</code></td></tr>
+          <tr><td>Valor por defecto</td><td><code>input('Hola')</code></td><td>Inicializador de la propiedad</td></tr>
+          <tr><td>Reaccionar al cambio</td><td><code>computed</code> / <code>effect</code></td><td><code>ngOnChanges</code></td></tr>
+          <tr><td>Nombre público distinto</td><td><code>input('', { alias: 'texto' })</code></td><td><code>@Input('texto')</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Hijo → Padre con la API moderna: <code>output()</code></h3>
+  <p>En Angular moderno puede utilizarse <code>output()</code>. Permite que el hijo emita eventos hacia el padre.</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">hijo.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, output } from '@angular/core';
+
+@Component({
+  selector: 'app-hijo',
+  template: `
+    &lt;button (click)="enviar()"&gt;Enviar&lt;/button&gt;
+  `
+})
+export class Hijo {
+  notificar = output&lt;string&gt;();
+
+  enviar() {
+    this.notificar.emit('Mensaje desde el hijo');
+  }
+}</code></pre>
+  </figure>
+  <p>El padre escucha el evento:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">padre.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;app-hijo (notificar)="manejarEvento($event)"&gt;&lt;/app-hijo&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">padre.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">manejarEvento(mensaje: string) {
+  console.log('Recibido del hijo:', mensaje);
+}</code></pre>
+  </figure>
+
+  <h3>Hijo → Padre con la API clásica: <code>@Output()</code> y <code>EventEmitter</code></h3>
+  <p>
+    <code>@Output()</code> y <code>EventEmitter</code> siguen siendo compatibles y aparecen en
+    muchos proyectos. Permiten que el hijo envíe eventos o información al componente padre.
+  </p>
+  <p>
+    El hijo declara un <code>@Output()</code> que emite un evento mediante un <code>EventEmitter</code>;
+    el padre escucha ese evento y ejecuta un método.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">hijo.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, EventEmitter, Output } from '@angular/core';
+
+@Component({
+  selector: 'app-hijo',
+  template: `&lt;button (click)="emitirEvento()"&gt;Enviar&lt;/button&gt;`
+})
+export class Hijo {
+  @Output() notificar = new EventEmitter&lt;string&gt;();
+
+  emitirEvento() {
+    this.notificar.emit('Mensaje desde el hijo');
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">padre.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;app-hijo (notificar)="manejarEvento($event)"&gt;&lt;/app-hijo&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">padre.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">manejarEvento(mensaje: string) {
+  console.log('Recibido del hijo:', mensaje);
+}</code></pre>
+  </figure>
+
+  <h3>Ejemplo completo: contador con hijos</h3>
+  <p>
+    El hijo recibe una etiqueta y emite un aviso cada vez que se pulsa. El padre los cuenta.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/tarjeta/tarjeta.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, input, output } from '@angular/core';
+
+@Component({
+  selector: 'app-tarjeta',
+  templateUrl: './tarjeta.html',
+  styleUrl: './tarjeta.css'
+})
+export class Tarjeta {
+  etiqueta = input.required&lt;string&gt;();
+  veces = input(0);
+
+  pulsada = output&lt;string&gt;();
+
+  alPulsar() {
+    this.pulsada.emit(this.etiqueta());
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/tarjeta/tarjeta.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;button class="tarjeta" (click)="alPulsar()"&gt;
+  &lt;strong&gt;{{ etiqueta() }}&lt;/strong&gt;
+  &lt;small&gt;Pulsada {{ veces() }} vez/veces&lt;/small&gt;
+&lt;/button&gt;</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, signal } from '@angular/core';
+import { Tarjeta } from './tarjeta/tarjeta';
+
+@Component({
+  selector: 'app-root',
+  imports: [Tarjeta],
+  templateUrl: './app.html'
+})
+export class App {
+  total = signal(0);
+  ultima = signal('—');
+
+  alPulsar(etiqueta: string) {
+    this.total.update(n =&gt; n + 1);
+    this.ultima.set(etiqueta);
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;p&gt;Total de pulsaciones: {{ total() }} · Última: {{ ultima() }}&lt;/p&gt;
+
+&lt;app-tarjeta etiqueta="Comprar" [veces]="total()" (pulsada)="alPulsar($event)"&gt;
+&lt;/app-tarjeta&gt;
+
+&lt;app-tarjeta etiqueta="Vender" [veces]="total()" (pulsada)="alPulsar($event)"&gt;
+&lt;/app-tarjeta&gt;</code></pre>
+  </figure>
+
+  <h3>Ampliación: <code>model()</code> para enlace bidireccional</h3>
+  <p>
+    <code>model()</code> crea un input que también puede emitir cambios, de modo que el padre
+    puede usar <code>[(valor)]</code> sobre el componente hijo:
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">hijo con model()</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, model } from '@angular/core';
+
+@Component({
+  selector: 'app-paso',
+  template: `&lt;button (click)="subir()"&gt;+1&lt;/button&gt; {{ valor() }}`
+})
+export class Paso {
+  valor = model(0);
+
+  subir() {
+    this.valor.update(v =&gt; v + 1);
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">padre.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;app-paso [(valor)]="contador"&gt;&lt;/app-paso&gt;</code></pre>
+  </figure>
+
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Dirección</th><th>API moderna</th><th>API clásica</th><th>Sintaxis</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Padre → Hijo</td>
+            <td><code>input()</code> / <code>input.required()</code></td>
+            <td><code>@Input()</code></td>
+            <td><code>[propiedad]="valor"</code></td>
+          </tr>
+          <tr>
+            <td>Hijo → Padre</td>
+            <td><code>output()</code></td>
+            <td><code>@Output()</code> + <code>EventEmitter</code></td>
+            <td><code>(evento)="metodo($event)"</code></td>
+          </tr>
+          <tr>
+            <td>Ambas</td>
+            <td><code>model()</code></td>
+            <td><code>@Input()</code> + <code>@Output()</code> con el mismo nombre + <code>Change</code></td>
+            <td><code>[(propiedad)]="valor"</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 9. NGMODULE ==================== -->
+<section class="sec" id="ngmodule">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">9</span> Organización clásica</div>
+    <h2>NgModule</h2>
+    <p class="intro">
+      Un <strong>módulo</strong> es una manera de organizar el código de una aplicación Angular.
+      En aplicaciones antiguas, el módulo principal suele ser <code>AppModule</code>. Los módulos
+      pueden agrupar componentes, servicios y otros módulos para estructurar mejor una aplicación.
+    </p>
+  </div>
+
+  <h3><code>@NgModule</code></h3>
+  <p>Es el decorador que indica que una clase es un módulo. Sus atributos más comunes:</p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Atributo</th><th>Contenido</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>declarations</code></td><td>Componentes, directivas y pipes que pertenecen al módulo.</td></tr>
+          <tr><td><code>imports</code></td><td>Otros módulos que se necesitan (<code>CommonModule</code>, <code>FormsModule</code>, <code>RouterModule</code>…).</td></tr>
+          <tr><td><code>providers</code></td><td>Servicios que serán inyectados.</td></tr>
+          <tr><td><code>bootstrap</code></td><td>Componente raíz que se inicializa cuando se carga el módulo.</td></tr>
+          <tr><td><code>exports</code></td><td>Lo que el módulo pone a disposición de quien lo importe.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">app.module.ts (proyecto clásico)</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">main.ts (arranque con módulo, sistema anterior)</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule);</code></pre>
+  </figure>
+
+  <h3>Modularización en Angular</h3>
+  <p>
+    Históricamente se utilizaban módulos para dividir aplicaciones grandes en partes más
+    manejables. Actualmente la organización se realiza principalmente mediante:
+  </p>
+  <ul>
+    <li><strong>Componentes standalone</strong>, que importan lo que necesitan.</li>
+    <li><strong>Rutas</strong> con <code>loadChildren</code> / <code>loadComponent</code> para separar secciones.</li>
+    <li><strong>Carpetas por funcionalidad</strong> (<em>features</em>) dentro de <code>src/app</code>.</li>
+  </ul>
+  <p>Los <code>NgModule</code> todavía pueden encontrarse en proyectos existentes. Ejemplo clásico:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">feature.module.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">@NgModule({
+  declarations: [Componente1, Componente2],
+  imports: [CommonModule, FormsModule],
+  exports: [Componente1, Componente2]
+})
+export class FeatureModule { }</code></pre>
+  </figure>
+  <p>Equivalente conceptual moderno:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">componente1.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">@Component({
+  selector: 'app-componente1',
+  imports: [FormsModule],
+  templateUrl: './componente1.html'
+})
+export class Componente1 {
+}</code></pre>
+  </figure>
+
+  <h3>Situación actual en Angular 22</h3>
+  <ul class="checklist">
+    <li>Angular utiliza componentes standalone por defecto.</li>
+    <li>En proyectos nuevos normalmente no es necesario crear un <code>AppModule</code>.</li>
+    <li>Los componentes importan directamente aquello que necesitan mediante <code>imports</code>.</li>
+    <li>Los <code>NgModule</code> siguen estando soportados y es importante conocerlos para trabajar con proyectos existentes y determinadas librerías.</li>
+  </ul>
+
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th></th><th>Con NgModule <span class="pill old">Clásico</span></th><th>Standalone <span class="pill new">Moderno</span></th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Registro del componente</td><td><code>declarations: [X]</code></td><td>No se registra en ningún sitio</td></tr>
+          <tr><td>Dependencias de plantilla</td><td>En los <code>imports</code> del módulo</td><td>En los <code>imports</code> del componente</td></tr>
+          <tr><td>Arranque</td><td><code>bootstrapModule(AppModule)</code></td><td><code>bootstrapApplication(App, appConfig)</code></td></tr>
+          <tr><td>Disponibilidad</td><td>Solo dentro del módulo (o exportado)</td><td>Basta con importar la clase</td></tr>
+          <tr><td>Uso recomendado hoy</td><td>Mantener en proyectos existentes</td><td>Sí, para código nuevo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 10. FORMULARIOS ==================== -->
+<section class="sec" id="formularios">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">10</span> Entrada de datos</div>
+    <h2>Formularios reactivos</h2>
+    <p class="intro">
+      Los formularios reactivos son una forma de crear y gestionar formularios en Angular
+      mediante la <strong>API reactiva</strong>. Se basa en la creación de instancias de
+      <code>FormControl</code>, <code>FormGroup</code> y <code>FormArray</code> en la clase del
+      componente, y la plantilla solo se enlaza a ese modelo.
+    </p>
+  </div>
+
+  <h3>Importar <code>ReactiveFormsModule</code></h3>
+  <p>En un componente standalone:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/formulario/formulario.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-formulario',
+  imports: [ReactiveFormsModule],
+  templateUrl: './formulario.html'
+})
+export class Formulario {
+}</code></pre>
+  </figure>
+
+  <h3>Las tres piezas de la API reactiva</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Clase</th><th>Representa</th><th>Ejemplo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>FormControl</code></td><td>Un único campo y su valor.</td><td><code>new FormControl('')</code></td></tr>
+          <tr><td><code>FormGroup</code></td><td>Un grupo de controles con nombres (el formulario).</td><td><code>new FormGroup({ nombre: … })</code></td></tr>
+          <tr><td><code>FormArray</code></td><td>Una lista dinámica de controles o grupos.</td><td><code>new FormArray([])</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Crear un formulario reactivo</h3>
+  <p>Primero, crear un <code>FormGroup</code> en el componente:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">formulario.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-formulario',
+  imports: [ReactiveFormsModule],
+  templateUrl: './formulario.html'
+})
+export class Formulario {
+  formulario = new FormGroup({
+    nombre: new FormControl(''),
+    email: new FormControl('')
+  });
+
+  onSubmit() {
+    console.log(this.formulario.value);
+  }
+}</code></pre>
+  </figure>
+
+  <p>Después, utilizar el formulario en la plantilla:</p>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">formulario.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;form [formGroup]="formulario" (ngSubmit)="onSubmit()"&gt;
+
+  &lt;label for="nombre"&gt;Nombre:&lt;/label&gt;
+  &lt;input id="nombre" formControlName="nombre"&gt;
+
+  &lt;label for="email"&gt;Email:&lt;/label&gt;
+  &lt;input id="email" formControlName="email"&gt;
+
+  &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+
+&lt;/form&gt;</code></pre>
+  </figure>
+
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Dos directivas clave</span>
+      <p>
+        <code>[formGroup]</code> enlaza el formulario del componente con el <code>&lt;form&gt;</code>.
+        <code>formControlName</code> indica qué control del grupo corresponde a cada campo.
+        <code>(ngSubmit)</code> se dispara al enviar y evita la recarga de la página.
+      </p>
+    </div>
+  </div>
+
+  <h3>Validaciones en formularios reactivos</h3>
+  <p>Se pueden agregar validaciones al <code>FormControl</code>. Ejemplo:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">validaciones.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">nombre: new FormControl('', [
+  Validators.required,
+  Validators.minLength(3)
+])</code></pre>
+  </figure>
+
+  <p>Validaciones más comunes:</p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Validador</th><th>Comprueba</th><th>Ejemplo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Validators.required</code></td><td>Que el campo no esté vacío.</td><td><code>Validators.required</code></td></tr>
+          <tr><td><code>Validators.minLength</code></td><td>Longitud mínima del texto.</td><td><code>Validators.minLength(3)</code></td></tr>
+          <tr><td><code>Validators.maxLength</code></td><td>Longitud máxima del texto.</td><td><code>Validators.maxLength(20)</code></td></tr>
+          <tr><td><code>Validators.email</code></td><td>Formato de correo electrónico.</td><td><code>Validators.email</code></td></tr>
+          <tr><td><code>Validators.pattern</code></td><td>Que coincida con una expresión regular.</td><td><code>Validators.pattern(/^[0-9]+$/)</code></td></tr>
+          <tr><td><code>Validators.min</code> / <code>max</code></td><td>Valor numérico mínimo o máximo.</td><td><code>Validators.min(18)</code></td></tr>
+          <tr><td><code>Validators.requiredTrue</code></td><td>Que un checkbox esté marcado.</td><td><code>Validators.requiredTrue</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Formulario completo con mensajes de error</h3>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">registro.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-registro',
+  imports: [ReactiveFormsModule],
+  templateUrl: './registro.html'
+})
+export class Registro {
+  enviado = signal(false);
+
+  formulario = new FormGroup({
+    nombre: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)]
+    }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email]
+    }),
+    edad: new FormControl&lt;number | null&gt;(null, [Validators.min(18)])
+  });
+
+  get nombre() {
+    return this.formulario.controls.nombre;
+  }
+
+  get email() {
+    return this.formulario.controls.email;
+  }
+
+  onSubmit() {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched(); // muestra todos los errores
+      return;
+    }
+
+    console.log(this.formulario.getRawValue());
+    this.enviado.set(true);
+    this.formulario.reset();
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">registro.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;form [formGroup]="formulario" (ngSubmit)="onSubmit()"&gt;
+
+  &lt;div&gt;
+    &lt;label for="nombre"&gt;Nombre&lt;/label&gt;
+    &lt;input id="nombre" formControlName="nombre"&gt;
+
+    @if (nombre.touched &amp;&amp; nombre.hasError('required')) {
+      &lt;small class="error"&gt;El nombre es obligatorio.&lt;/small&gt;
+    }
+    @if (nombre.hasError('minlength')) {
+      &lt;small class="error"&gt;Mínimo 3 caracteres.&lt;/small&gt;
+    }
+  &lt;/div&gt;
+
+  &lt;div&gt;
+    &lt;label for="email"&gt;Email&lt;/label&gt;
+    &lt;input id="email" type="email" formControlName="email"&gt;
+
+    @if (email.touched &amp;&amp; email.hasError('email')) {
+      &lt;small class="error"&gt;Formato de correo no válido.&lt;/small&gt;
+    }
+  &lt;/div&gt;
+
+  &lt;button type="submit" [disabled]="formulario.invalid"&gt;Registrarme&lt;/button&gt;
+&lt;/form&gt;
+
+@if (enviado()) {
+  &lt;p class="ok"&gt;¡Formulario enviado!&lt;/p&gt;
+}</code></pre>
+  </figure>
+
+  <h3>Estado de los controles</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Propiedad / método</th><th>Significado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>value</code></td><td>Valor actual del control o del grupo.</td></tr>
+          <tr><td><code>valid</code> / <code>invalid</code></td><td>Si cumple o no todas las validaciones.</td></tr>
+          <tr><td><code>errors</code></td><td>Objeto con los errores presentes (<code>required</code>, <code>minlength</code>…).</td></tr>
+          <tr><td><code>touched</code> / <code>untouched</code></td><td>Si el usuario ya entró y salió del campo.</td></tr>
+          <tr><td><code>dirty</code> / <code>pristine</code></td><td>Si el valor ha cambiado o no.</td></tr>
+          <tr><td><code>setValue()</code> / <code>patchValue()</code></td><td>Asignar valores (todo el grupo completo / solo una parte).</td></tr>
+          <tr><td><code>reset()</code></td><td>Vacía el formulario y limpia estados.</td></tr>
+          <tr><td><code>markAllAsTouched()</code></td><td>Marca todos los campos como tocados (útil al enviar).</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3><code>FormBuilder</code></h3>
+  <p>
+    Es una forma más sencilla de crear formularios utilizando la clase <code>FormBuilder</code>.
+    Puede obtenerse mediante inyección de dependencias. Ejemplo moderno con <code>inject()</code>:
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">form-builder.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-formulario',
+  imports: [ReactiveFormsModule],
+  templateUrl: './formulario.html'
+})
+export class Formulario {
+  private fb = inject(FormBuilder);
+
+  formulario = this.fb.group({
+    nombre: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]]
+  });
+}</code></pre>
+  </figure>
+  <p>La inyección mediante constructor también sigue siendo válida:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">constructor</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">constructor(private fb: FormBuilder) {}</code></pre>
+  </figure>
+
+  <h3>Ampliación: <code>FormArray</code></h3>
+  <p>Para listas de campos que crecen o decrecen (teléfonos, etiquetas, líneas de factura):</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">form-array.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, inject } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-telefonos',
+  imports: [ReactiveFormsModule],
+  templateUrl: './telefonos.html'
+})
+export class Telefonos {
+  private fb = inject(FormBuilder);
+
+  formulario = this.fb.group({
+    telefonos: this.fb.array([
+      new FormControl('', Validators.required)
+    ])
+  });
+
+  get telefonos(): FormArray {
+    return this.formulario.get('telefonos') as FormArray;
+  }
+
+  agregar() {
+    this.telefonos.push(new FormControl('', Validators.required));
+  }
+
+  quitar(i: number) {
+    this.telefonos.removeAt(i);
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">telefonos.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;form [formGroup]="formulario"&gt;
+  &lt;div formArrayName="telefonos"&gt;
+    @for (control of telefonos.controls; track $index) {
+      &lt;input [formControlName]="$index" placeholder="Teléfono"&gt;
+      &lt;button type="button" (click)="quitar($index)"&gt;Quitar&lt;/button&gt;
+    }
+  &lt;/div&gt;
+
+  &lt;button type="button" (click)="agregar()"&gt;Añadir teléfono&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  </figure>
+
+  <div class="note danger">
+    <span class="ico">⛔</span>
+    <div class="body">
+      <span class="label">Errores frecuentes</span>
+      <p>
+        <code>Can't bind to 'formGroup'</code> → falta <code>ReactiveFormsModule</code> en <code>imports</code>.<br>
+        <code>Cannot find control with name: 'x'</code> → el <code>formControlName</code> no existe en el <code>FormGroup</code>.<br>
+        <code>formGroup expects a FormGroup instance</code> → el formulario se ha creado mal o se ha sobrescrito.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 11. SERVICIOS ==================== -->
+<section class="sec" id="servicios">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">11</span> Lógica compartida</div>
+    <h2>Servicios y Dependencias</h2>
+    <p class="intro">
+      Los servicios permiten compartir lógica y datos entre distintos componentes, evitando
+      duplicar código. Se crean con el CLI, se marcan con <code>@Injectable()</code> y se
+      obtienen mediante inyección de dependencias.
+    </p>
+  </div>
+
+  <h3>Servicios</h3>
+  <p>Se utilizan para tareas como:</p>
+  <div class="grid two">
+    <ul>
+      <li>Comunicación con APIs.</li>
+      <li>Gestión de datos y estados.</li>
+      <li>Lógica reutilizable.</li>
+    </ul>
+    <ul>
+      <li>Validaciones.</li>
+      <li>Cálculos.</li>
+      <li>Almacenamiento local.</li>
+    </ul>
+  </div>
+
+  <p>Se crean con el comando:</p>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">ng generate service nombre-servicio
+
+# forma abreviada
+ng g s nombre-servicio</code></pre>
+  </figure>
+
+  <p>
+    Usan el decorador <code>@Injectable()</code>, que indica que el servicio puede participar en
+    la inyección de dependencias. Ejemplo básico:
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/logger.service.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoggerService {
+
+  log(mensaje: string) {
+    console.log(mensaje);
+  }
+
+}</code></pre>
+  </figure>
+
+  <h3>Inyección de Dependencias (Dependency Injection)</h3>
+  <p>
+    La inyección de dependencias consiste en que el componente <strong>no crea</strong> el
+    servicio con <code>new</code>, sino que lo <strong>pide</strong> y Angular se lo entrega.
+    Existen dos sintaxis válidas.
+  </p>
+
+  <h4>Con <code>inject()</code> <span class="pill new">Moderno</span></h4>
+  <p>En Angular moderno puede utilizarse la función <code>inject()</code>:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">ejemplo.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, inject } from '@angular/core';
+import { LoggerService } from '../logger.service';
+
+@Component({
+  selector: 'app-ejemplo',
+  templateUrl: './ejemplo.html'
+})
+export class Ejemplo {
+
+  private logger = inject(LoggerService);
+
+  ngOnInit() {
+    this.logger.log('Componente inicializado');
+  }
+
+}</code></pre>
+  </figure>
+
+  <h4>Con constructor <span class="pill old">Clásico</span></h4>
+  <p>La inyección mediante constructor sigue siendo válida:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">ejemplo.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { LoggerService } from '../logger.service';
+
+@Component({
+  selector: 'app-ejemplo',
+  templateUrl: './ejemplo.html'
+})
+export class Ejemplo {
+
+  constructor(private logger: LoggerService) {}
+
+  ngOnInit() {
+    this.logger.log('Componente inicializado');
+  }
+
+}</code></pre>
+  </figure>
+
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th></th><th><code>inject()</code></th><th>Constructor</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sintaxis</td><td><code>private x = inject(Servicio)</code></td><td><code>constructor(private x: Servicio)</code></td></tr>
+          <tr><td>Herencia</td><td>No hay que repetir parámetros en las subclases.</td><td>Las subclases deben reenviar dependencias.</td></tr>
+          <tr><td>Dónde se puede usar</td><td>Constructor, inicializadores de campo, guards, funciones.</td><td>Solo en el constructor.</td></tr>
+          <tr><td>Test</td><td>Se sustituye con <code>TestBed</code> de forma directa.</td><td>Igual, vía providers.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Ámbitos (Scopes)</h3>
+  <p>
+    <code>providedIn: 'root'</code> deja el servicio disponible en toda la aplicación y es la
+    opción habitual para servicios globales: Angular crea <strong>una sola instancia</strong>.
+  </p>
+  <p>
+    También puede registrarse un servicio en los <code>providers</code> de un componente, de una
+    ruta o de la configuración de la aplicación. Esto permite limitar su alcance y controlar
+    cuándo se crea una nueva instancia.
+  </p>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Dónde se registra</th><th>Alcance</th><th>Instancias</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>providedIn: 'root'</code></td><td>Toda la aplicación.</td><td>Una (singleton).</td></tr>
+          <tr><td><code>component.providers</code></td><td>El componente y sus hijos.</td><td>Una por cada instancia del componente.</td></tr>
+          <tr><td><code>route.providers</code></td><td>La ruta y sus rutas hijas.</td><td>Una por ruta cargada.</td></tr>
+          <tr><td><code>appConfig.providers</code></td><td>Global, a nivel de aplicación.</td><td>Una.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">servicio con alcance limitado al componente</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">@Component({
+  selector: 'app-carrito',
+  templateUrl: './carrito.html',
+  providers: [CarritoService]   // cada instancia de Carrito tendrá su propio servicio
+})
+export class Carrito {
+  private carrito = inject(CarritoService);
+}</code></pre>
+  </figure>
+  <div class="note tip">
+    <span class="ico">💡</span>
+    <div class="body">
+      <span class="label">Regla práctica</span>
+      <p>
+        Servicio global → <code>providedIn: 'root'</code>.
+        Servicio con estado propio de una pantalla → <code>providers</code> del componente o de la ruta.
+      </p>
+    </div>
+  </div>
+
+  <h3>Servicios habituales</h3>
+
+  <h4>1 · Almacenamiento local</h4>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/storage.service.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Injectable, signal } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class StorageService {
+  private clave = 'preferencias';
+  preferencias = signal&lt;Record&lt;string, string&gt;&gt;({});
+
+  constructor() {
+    const guardado = localStorage.getItem(this.clave);
+    if (guardado) {
+      this.preferencias.set(JSON.parse(guardado));
+    }
+  }
+
+  guardar(datos: Record&lt;string, string&gt;) {
+    this.preferencias.set(datos);
+    localStorage.setItem(this.clave, JSON.stringify(datos));
+  }
+
+  limpiar() {
+    localStorage.removeItem(this.clave);
+    this.preferencias.set({});
+  }
+}</code></pre>
+  </figure>
+
+  <h4>2 · Comunicación con una API REST</h4>
+  <p>
+    Se usa <code>HttpClient</code>, que debe habilitarse con <code>provideHttpClient()</code>
+    en <code>app.config.ts</code>.
+  </p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/app.config.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient()
+  ]
+};</code></pre>
+  </figure>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/usuarios.service.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+
+export interface Usuario {
+  id: number;
+  nombre: string;
+  email: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class UsuariosService {
+  private http = inject(HttpClient);
+  private url = 'https://jsonplaceholder.typicode.com/users';
+
+  listar(): Observable&lt;Usuario[]&gt; {
+    return this.http.get&lt;Usuario[]&gt;(this.url);
+  }
+
+  obtener(id: number): Observable&lt;Usuario&gt; {
+    return this.http.get&lt;Usuario&gt;(`${this.url}/${id}`);
+  }
+
+  crear(usuario: Omit&lt;Usuario, 'id'&gt;): Observable&lt;Usuario&gt; {
+    return this.http.post&lt;Usuario&gt;(this.url, usuario);
+  }
+
+  actualizar(id: number, cambios: Partial&lt;Usuario&gt;): Observable&lt;Usuario&gt; {
+    return this.http.patch&lt;Usuario&gt;(`${this.url}/${id}`, cambios);
+  }
+
+  eliminar(id: number): Observable&lt;void&gt; {
+    return this.http.delete&lt;void&gt;(`${this.url}/${id}`);
+  }
+}</code></pre>
+  </figure>
+  <p>Consumo desde un componente, guardando el resultado en un signal:</p>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">lista-usuarios.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component, OnInit, inject, signal } from '@angular/core';
+import { UsuariosService, Usuario } from '../usuarios.service';
+
+@Component({
+  selector: 'app-lista-usuarios',
+  templateUrl: './lista-usuarios.html'
+})
+export class ListaUsuarios implements OnInit {
+  private servicio = inject(UsuariosService);
+
+  usuarios = signal&lt;Usuario[]&gt;([]);
+  cargando = signal(true);
+  error = signal('');
+
+  ngOnInit() {
+    this.servicio.listar().subscribe({
+      next: datos =&gt; {
+        this.usuarios.set(datos);
+        this.cargando.set(false);
+      },
+      error: () =&gt; {
+        this.error.set('No se pudieron cargar los usuarios');
+        this.cargando.set(false);
+      }
+    });
+  }
+}</code></pre>
+  </figure>
+
+  <h4>3 · Comunicación mediante WebSockets</h4>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">src/app/chat.service.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class ChatService {
+  private socket?: WebSocket;
+  private mensajesSubject = new Subject&lt;string&gt;();
+
+  // los componentes se suscriben a este observable
+  mensajes$ = this.mensajesSubject.asObservable();
+
+  conectar(url: string) {
+    this.socket = new WebSocket(url);
+
+    this.socket.onmessage = evento =&gt; this.mensajesSubject.next(evento.data);
+
+    this.socket.onopen = () =&gt; console.log('Conectado');
+    this.socket.onerror = () =&gt; this.mensajesSubject.error('Error de conexión');
+  }
+
+  enviar(texto: string) {
+    if (this.socket?.readyState === WebSocket.OPEN) {
+      this.socket.send(texto);
+    }
+  }
+
+  desconectar() {
+    this.socket?.close();
+    this.socket = undefined;
+  }
+}</code></pre>
+  </figure>
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Limpieza</span>
+      <p>
+        Si un componente se suscribe a un observable que no se completa solo, debe cancelar la
+        suscripción en <code>ngOnDestroy</code> o usar <code>takeUntilDestroyed()</code>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 12. MATERIAL ==================== -->
+<section class="sec" id="material">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">12</span> Componentes de interfaz</div>
+    <h2>Angular Material</h2>
+    <p class="intro">
+      Angular Material es la librería oficial de componentes de interfaz basados en
+      <em>Material Design</em>: botones, tarjetas, tablas, diálogos, menús, navegación y temas.
+      Se integra con componentes standalone importando únicamente los módulos que se usan.
+    </p>
+  </div>
+
+  <h3>Instalación</h3>
+  <figure class="code" data-lang="bash">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">terminal</span>
+      <span class="lang">bash</span>
+    </figcaption>
+<pre><code class="lang-bash">ng add @angular/material</code></pre>
+  </figure>
+  <p>El comando <code>ng add</code> realiza la instalación y configura el proyecto:</p>
+  <ul>
+    <li>Añade la dependencia <code>@angular/material</code>.</li>
+    <li>Pregunta el <strong>tema</strong> predefinido y la tipografía.</li>
+    <li>Registra los estilos del tema en <code>angular.json</code> o en <code>styles.css</code>.</li>
+    <li>Configura las animaciones necesarias.</li>
+  </ul>
+
+  <h3>Componentes habituales</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Módulo</th><th>Componente</th><th>Para qué</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>MatButtonModule</code></td><td><code>&lt;button matButton&gt;</code></td><td>Botones con estilos Material.</td></tr>
+          <tr><td><code>MatToolbarModule</code></td><td><code>&lt;mat-toolbar&gt;</code></td><td>Barra superior de la aplicación.</td></tr>
+          <tr><td><code>MatCardModule</code></td><td><code>&lt;mat-card&gt;</code></td><td>Tarjetas de contenido.</td></tr>
+          <tr><td><code>MatIconModule</code></td><td><code>&lt;mat-icon&gt;</code></td><td>Iconos de la fuente Material Icons.</td></tr>
+          <tr><td><code>MatFormFieldModule</code></td><td><code>&lt;mat-form-field&gt;</code></td><td>Campos de formulario con etiqueta y errores.</td></tr>
+          <tr><td><code>MatInputModule</code></td><td><code>matInput</code></td><td>Inputs dentro de <code>mat-form-field</code>.</td></tr>
+          <tr><td><code>MatTableModule</code></td><td><code>&lt;table mat-table&gt;</code></td><td>Tablas con ordenación y paginación.</td></tr>
+          <tr><td><code>MatSidenavModule</code></td><td><code>&lt;mat-sidenav-container&gt;</code></td><td>Menú lateral.</td></tr>
+          <tr><td><code>MatDialogModule</code></td><td><code>MatDialog</code></td><td>Ventanas modales.</td></tr>
+          <tr><td><code>MatSnackBarModule</code></td><td><code>MatSnackBar</code></td><td>Avisos emergentes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Ejemplo de uso</h3>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">panel.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  selector: 'app-panel',
+  imports: [MatToolbarModule, MatCardModule, MatButtonModule, MatIconModule],
+  templateUrl: './panel.html'
+})
+export class Panel {
+  guardar() {
+    console.log('Guardado');
+  }
+}</code></pre>
+  </figure>
+  <figure class="code" data-lang="html">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">panel.html</span>
+      <span class="lang">html</span>
+    </figcaption>
+<pre><code class="lang-html">&lt;mat-toolbar color="primary"&gt;
+  &lt;span&gt;Mi aplicación&lt;/span&gt;
+&lt;/mat-toolbar&gt;
+
+&lt;mat-card appearance="outlined"&gt;
+  &lt;mat-card-header&gt;
+    &lt;mat-card-title&gt;Usuarios&lt;/mat-card-title&gt;
+    &lt;mat-card-subtitle&gt;Gestión de altas y bajas&lt;/mat-card-subtitle&gt;
+  &lt;/mat-card-header&gt;
+
+  &lt;mat-card-content&gt;
+    &lt;p&gt;Aquí se mostraría el listado.&lt;/p&gt;
+  &lt;/mat-card-content&gt;
+
+  &lt;mat-card-actions&gt;
+    &lt;button matButton="filled" (click)="guardar()"&gt;
+      &lt;mat-icon&gt;save&lt;/mat-icon&gt;
+      Guardar
+    &lt;/button&gt;
+    &lt;button matButton&gt;Cancelar&lt;/button&gt;
+  &lt;/mat-card-actions&gt;
+&lt;/mat-card&gt;</code></pre>
+  </figure>
+  <div class="note">
+    <span class="ico">ℹ️</span>
+    <div class="body">
+      <span class="label">Nombres de API</span>
+      <p>
+        Las versiones recientes de Material usan <code>matButton</code> y <code>appearance</code>
+        en lugar de los antiguos <code>mat-raised-button</code> / <code>mat-button</code>.
+        Ambos estilos siguen documentados; en el examen basta con reconocer los módulos y las etiquetas.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 13. CHULETA ==================== -->
+<section class="sec" id="chuleta">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">13</span> Repaso rápido</div>
+    <h2>Chuleta de comandos y equivalencias</h2>
+    <p class="intro">
+      Resumen condensado para repasar el día antes del examen: comandos del CLI, equivalencias
+      entre la API clásica y la moderna, qué hay que importar en cada caso y los mensajes de
+      error más habituales.
+    </p>
+  </div>
+
+  <h3>Comandos imprescindibles</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Comando</th><th>Qué hace</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>node -v</code></td><td>Muestra la versión de Node.js.</td></tr>
+          <tr><td><code>npm -v</code></td><td>Muestra la versión de npm.</td></tr>
+          <tr><td><code>npm install -g @angular/cli</code></td><td>Instala el Angular CLI de forma global.</td></tr>
+          <tr><td><code>ng version</code></td><td>Comprueba la versión del CLI instalada.</td></tr>
+          <tr><td><code>ng new PrimerProyecto</code></td><td>Crea un proyecto nuevo (standalone por defecto).</td></tr>
+          <tr><td><code>ng serve</code></td><td>Sirve la app en <code>http://localhost:4200/</code>.</td></tr>
+          <tr><td><code>ng serve --open</code></td><td>Sirve y abre el navegador (<code>-o</code>).</td></tr>
+          <tr><td><code>ng serve --port 4500</code></td><td>Sirve en el puerto 4500.</td></tr>
+          <tr><td><code>ng generate component usuario</code></td><td>Crea un componente (<code>ng g c usuario</code>).</td></tr>
+          <tr><td><code>ng generate service logger</code></td><td>Crea un servicio (<code>ng g s logger</code>).</td></tr>
+          <tr><td><code>ng generate module ventas</code></td><td>Crea un NgModule (<code>ng g m ventas</code>).</td></tr>
+          <tr><td><code>ng build</code></td><td>Compila la aplicación para producción.</td></tr>
+          <tr><td><code>ng test</code></td><td>Ejecuta las pruebas unitarias.</td></tr>
+          <tr><td><code>ng add @angular/material</code></td><td>Instala y configura Angular Material.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Clásico frente a moderno</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Concepto</th><th>Clásico <span class="pill old">Clásico</span></th><th>Moderno <span class="pill new">Moderno</span></th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Arranque</td><td><code>bootstrapModule(AppModule)</code></td><td><code>bootstrapApplication(App, appConfig)</code></td></tr>
+          <tr><td>Organización</td><td><code>NgModule</code> + <code>declarations</code></td><td>Standalone + <code>imports</code></td></tr>
+          <tr><td>Estado reactivo</td><td>Propiedades + Zone.js</td><td><code>signal()</code>, <code>computed()</code>, <code>effect()</code></td></tr>
+          <tr><td>Condicional</td><td><code>*ngIf</code></td><td><code>@if</code> / <code>@else</code></td></tr>
+          <tr><td>Bucle</td><td><code>*ngFor</code> + <code>trackBy</code></td><td><code>@for</code> + <code>track</code></td></tr>
+          <tr><td>Entrada de hijo</td><td><code>@Input()</code></td><td><code>input()</code> / <code>input.required()</code></td></tr>
+          <tr><td>Salida de hijo</td><td><code>@Output()</code> + <code>EventEmitter</code></td><td><code>output()</code></td></tr>
+          <tr><td>Bidireccional de componente</td><td><code>@Input()</code> + <code>@Output()</code></td><td><code>model()</code></td></tr>
+          <tr><td>Inyección</td><td>Constructor</td><td><code>inject()</code></td></tr>
+          <tr><td>Router</td><td><code>RouterModule.forRoot(routes)</code></td><td><code>provideRouter(routes)</code></td></tr>
+          <tr><td>Guards</td><td>Clases que implementan interfaces</td><td>Funciones <code>CanActivateFn</code>, <code>CanMatchFn</code>…</td></tr>
+          <tr><td>Carga diferida</td><td><code>loadChildren</code> con módulos</td><td><code>loadComponent</code> / <code>loadChildren</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Qué importar en cada caso</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Si usas…</th><th>Importa</th><th>Desde</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>[(ngModel)]</code></td><td><code>FormsModule</code></td><td><code>@angular/forms</code></td></tr>
+          <tr><td><code>[formGroup]</code>, <code>FormControl</code></td><td><code>ReactiveFormsModule</code></td><td><code>@angular/forms</code></td></tr>
+          <tr><td><code>*ngIf</code>, <code>*ngFor</code>, <code>DatePipe</code></td><td><code>CommonModule</code></td><td><code>@angular/common</code></td></tr>
+          <tr><td><code>&lt;router-outlet&gt;</code></td><td><code>RouterOutlet</code></td><td><code>@angular/router</code></td></tr>
+          <tr><td><code>routerLink</code></td><td><code>RouterLink</code>, <code>RouterLinkActive</code></td><td><code>@angular/router</code></td></tr>
+          <tr><td><code>HttpClient</code></td><td><code>provideHttpClient()</code> en <code>app.config.ts</code></td><td><code>@angular/common/http</code></td></tr>
+          <tr><td><code>&lt;app-hijo&gt;</code></td><td>La clase <code>Hijo</code></td><td>Ruta relativa del archivo</td></tr>
+          <tr><td><code>signal</code>, <code>computed</code>, <code>inject</code></td><td>Nada: se importan como funciones</td><td><code>@angular/core</code></td></tr>
+          <tr><td><code>&lt;mat-card&gt;</code></td><td><code>MatCardModule</code></td><td><code>@angular/material/card</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Mensajes de error y su causa</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Mensaje</th><th>Significa</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>'app-x' is not a known element</code></td>
+            <td>Falta el componente en <code>imports</code> de quien lo usa.</td>
+          </tr>
+          <tr>
+            <td><code>Can't bind to 'ngModel'…</code></td>
+            <td>Falta <code>FormsModule</code>.</td>
+          </tr>
+          <tr>
+            <td><code>Can't bind to 'formGroup'…</code></td>
+            <td>Falta <code>ReactiveFormsModule</code>.</td>
+          </tr>
+          <tr>
+            <td><code>Cannot find control with name…</code></td>
+            <td><code>formControlName</code> que no existe en el <code>FormGroup</code>.</td>
+          </tr>
+          <tr>
+            <td><code>NullInjectorError: No provider for X</code></td>
+            <td>Servicio no registrado o falta un <code>provide…</code>.</td>
+          </tr>
+          <tr>
+            <td><code>NG0100: ExpressionChangedAfterItHasBeenCheckedError</code></td>
+            <td>Un valor de la plantilla cambió después de la comprobación de cambios; suele indicar lógica en el ciclo de vida mal ubicada.</td>
+          </tr>
+          <tr>
+            <td><code>Node.js version … is not supported</code></td>
+            <td>Versión de Node incompatible con el CLI.</td>
+          </tr>
+          <tr>
+            <td><code>NullInjectorError: No provider for HttpClient!</code></td>
+            <td>Falta <code>provideHttpClient()</code> en los <code>providers</code> de <code>app.config.ts</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Mini-chuleta de Signals</h3>
+  <figure class="code" data-lang="ts">
+    <figcaption>
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="name">signals-cheatsheet.ts</span>
+      <span class="lang">ts</span>
+    </figcaption>
+<pre><code class="lang-ts">import { computed, effect, signal } from '@angular/core';
+
+// crear
+contador = signal(0);
+nombre = signal('Ana');
+
+// leer (siempre con paréntesis)
+const valor = this.contador();
+
+// escribir
+this.contador.set(10);                  // valor nuevo
+this.contador.update(v =&gt; v + 1);       // a partir del anterior
+
+// derivar (solo lectura)
+doble = computed(() =&gt; this.contador() * 2);
+saludo = computed(() =&gt; `Hola, ${this.nombre()}`);
+
+// efecto secundario
+constructor() {
+  effect(() =&gt; localStorage.setItem('contador', String(this.contador())));
+}</code></pre>
+  </figure>
+</section>
+
+<!-- ==================== 14. AUTOEXAMEN ==================== -->
+<section class="sec" id="autoexamen">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">14</span> Pon a prueba</div>
+    <h2>Autoexamen</h2>
+    <p class="intro">
+      Treinta y cinco preguntas sobre todo el temario. Intenta responder mentalmente y pulsa cada
+      pregunta para comprobar la respuesta.
+    </p>
+  </div>
+
+  <h3>Instalación y proyecto</h3>
+
+  <details class="qa">
+    <summary>1. ¿Qué dos comandos comprueban la instalación de Node.js y npm?</summary>
+    <div class="answer"><p><code>node -v</code> y <code>npm -v</code>. La opción <code>-v</code> muestra la versión.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>2. ¿Qué versiones de Node.js son compatibles con Angular 22?</summary>
+    <div class="answer"><p><code>^22.22.3</code>, <code>^24.15.0</code> o <code>^26.0.0</code>. Node 20 ya no está soportado, y el CLI falla si se usa.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>3. ¿Qué es el Prebuilt Installer de Node.js?</summary>
+    <div class="answer"><p>El instalador ya compilado que se descarga desde <code>nodejs.org</code> (por ejemplo <code>.msi</code> en Windows o <code>.pkg</code> en macOS). No hay que compilar el código fuente e incluye npm.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>4. ¿Qué comando instala Angular CLI de forma global y cómo se verifica?</summary>
+    <div class="answer"><p><code>npm install -g @angular/cli</code> y después <code>ng version</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>5. Escribe la secuencia para crear y arrancar un proyecto llamado <code>PrimerProyecto</code>.</summary>
+    <div class="answer"><p><code>cd carpeta</code> → <code>ng new PrimerProyecto</code> → <code>cd PrimerProyecto</code> → <code>ng serve --open</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>6. ¿En qué URL sirve la aplicación <code>ng serve</code> por defecto y cómo se cambia el puerto?</summary>
+    <div class="answer"><p>En <code>http://localhost:4200/</code>. Se cambia con <code>ng serve --port 4500</code> (o <code>-p 4500</code>).</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>7. ¿Qué diferencia hay entre <code>ng serve</code> y <code>ng serve --open</code>?</summary>
+    <div class="answer"><p><code>--open</code> (abreviatura <code>-o</code>) abre automáticamente el navegador al terminar la compilación. El servidor es el mismo.</p></div>
+  </details>
+
+  <h3>Componentes</h3>
+
+  <details class="qa">
+    <summary>8. ¿Qué comando genera el componente <code>usuario</code> y cuál es su forma abreviada?</summary>
+    <div class="answer"><p><code>ng generate component usuario</code>, abreviado como <code>ng g c usuario</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>9. ¿Qué archivos crea <code>ng g c usuario</code>?</summary>
+    <div class="answer"><p><code>usuario.ts</code>, <code>usuario.html</code>, <code>usuario.css</code> y <code>usuario.spec.ts</code>, dentro de la carpeta <code>usuario/</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>10. Nombra los metadatos principales de <code>@Component</code>.</summary>
+    <div class="answer"><p><code>selector</code>, <code>templateUrl</code>, <code>styleUrl</code> e <code>imports</code>. También existen <code>template</code> y <code>styles</code> en línea.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>11. ¿Desde qué versión los componentes son standalone por defecto y qué implica?</summary>
+    <div class="answer"><p>Desde Angular 19. Implica que no hace falta declararlos en un <code>NgModule</code> ni escribir <code>standalone: true</code>: importan lo que necesitan mediante <code>imports</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>12. ¿Por qué aparece <code>'app-usuario' is not a known element</code>?</summary>
+    <div class="answer"><p>Porque el componente que usa esa etiqueta no tiene <code>Usuario</code> en su propiedad <code>imports</code>.</p></div>
+  </details>
+
+  <h3>Binding y estado</h3>
+
+  <details class="qa">
+    <summary>13. Enumera los cuatro tipos de binding con su sintaxis y dirección.</summary>
+    <div class="answer">
+      <p>
+        Interpolación <code>{{ valor }}</code> (componente → vista) ·
+        Property binding <code>[prop]="valor"</code> (componente → vista) ·
+        Event binding <code>(click)="metodo()"</code> (vista → componente) ·
+        Two-way binding <code>[(ngModel)]="valor"</code> (ambas direcciones).
+      </p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary>14. ¿Qué hay que importar para usar <code>[(ngModel)]</code> en un componente standalone?</summary>
+    <div class="answer"><p><code>FormsModule</code> de <code>@angular/forms</code>, añadido al arreglo <code>imports</code> del componente.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>15. ¿Cómo se lee el valor de un signal llamado <code>contador</code>?</summary>
+    <div class="answer"><p>Invocándolo como función: <code>this.contador()</code> en la clase y <code>{{ contador() }}</code> en la plantilla.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>16. Diferencia entre <code>set()</code> y <code>update()</code>.</summary>
+    <div class="answer"><p><code>set(v)</code> sustituye el valor por <code>v</code>; <code>update(fn)</code> calcula el nuevo valor a partir del anterior, por ejemplo <code>update(v =&gt; v + 1)</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>17. ¿Se puede modificar un <code>computed</code> con <code>set()</code>?</summary>
+    <div class="answer"><p>No. Un <code>computed</code> es de solo lectura: se recalcula automáticamente cuando cambian los signals de los que depende.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>18. ¿Para qué sirve <code>effect()</code> y para qué no debe usarse?</summary>
+    <div class="answer"><p>Para ejecutar efectos secundarios cuando cambian los signals que lee (logs, <code>localStorage</code>, APIs del navegador). No debe usarse como sustituto de <code>computed()</code> para calcular valores derivados.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>19. Escribe un signal <code>contador</code> que empiece en 0 y otro <code>doble</code> que sea el doble.</summary>
+    <div class="answer"><p><code>contador = signal(0);</code> y <code>doble = computed(() =&gt; this.contador() * 2);</code></p></div>
+  </details>
+
+  <h3>Plantillas</h3>
+
+  <details class="qa">
+    <summary>20. Reescribe <code>*ngIf="esVisible; else noVisible"</code> con sintaxis moderna.</summary>
+    <div class="answer"><p><code>@if (esVisible) { … } @else { … }</code>. Ya no hace falta <code>&lt;ng-template #noVisible&gt;</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>21. ¿Es obligatorio <code>track</code> en <code>@for</code>? ¿Qué variables internas existen?</summary>
+    <div class="answer">
+      <p>Sí, es obligatorio. Variables: <code>$index</code>, <code>$first</code>, <code>$last</code>, <code>$even</code>, <code>$odd</code> y <code>$count</code>.</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary>22. ¿Cuándo usar <code>track $index</code> y cuándo <code>track usuario.id</code>?</summary>
+    <div class="answer">
+      <p><code>$index</code> para colecciones estáticas sin identidad propia; <code>usuario.id</code> para listas de objetos que pueden cambiar de orden, filtrarse o recibir nuevos elementos, porque permite reutilizar los nodos correctos.</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary>23. ¿Qué muestra el bloque <code>@empty</code>?</summary>
+    <div class="answer"><p>El contenido alternativo cuando la colección del <code>@for</code> está vacía, sin necesidad de un <code>@if</code> adicional.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>24. ¿Hay que importar <code>CommonModule</code> para usar <code>@if</code> o <code>@for</code>?</summary>
+    <div class="answer"><p>No. Están integrados en la sintaxis de plantillas de Angular. <code>CommonModule</code> solo hace falta para las directivas clásicas <code>*ngIf</code>, <code>*ngFor</code>, <code>ngClass</code>, etc.</p></div>
+  </details>
+
+  <h3>Routing y comunicación</h3>
+
+  <details class="qa">
+    <summary>25. ¿Qué tres elementos básicos del router debes conocer y qué hace cada uno?</summary>
+    <div class="answer">
+      <p><code>Routes</code>: arreglo que asocia <code>path</code> con componente. <code>RouterOutlet</code>: área donde se renderiza el componente activo. <code>RouterLink</code>: navegación sin recargar. Además, <code>ActivatedRoute</code> lee la ruta activa y <code>Router</code> navega por código.</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary>26. ¿Para qué sirve la ruta <code>path: '**'</code> y dónde debe colocarse?</summary>
+    <div class="answer"><p>Es la ruta comodín (404): captura cualquier URL no definida. Debe ir siempre al final del arreglo, porque el router usa la primera coincidencia.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>27. ¿Qué hace <code>loadComponent</code> y qué ventaja tiene?</summary>
+    <div class="answer"><p>Carga un componente standalone de forma diferida (lazy loading): su código se descarga solo al navegar a esa ruta, lo que reduce el tamaño inicial de la aplicación.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>28. ¿Qué guard sustituye a <code>CanLoad</code> y qué tipos de guard existen?</summary>
+    <div class="answer"><p><code>CanLoad</code> está deprecado y lo sustituye <code>CanMatch</code>. Los tipos principales son <code>CanActivate</code>, <code>CanActivateChild</code>, <code>CanDeactivate</code> y <code>CanMatch</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>29. ¿Cómo se comunica un hijo con su padre en Angular moderno?</summary>
+    <div class="answer">
+      <p>Con <code>output()</code>: el hijo declara <code>notificar = output&lt;string&gt;()</code> y llama a <code>emit()</code>; el padre escucha con <code>(notificar)="metodo($event)"</code>. La API clásica es <code>@Output()</code> + <code>EventEmitter</code>.</p>
+    </div>
+  </details>
+
+  <h3>NgModules, formularios y servicios</h3>
+
+  <details class="qa">
+    <summary>30. Diferencia entre <code>declarations</code> e <code>imports</code> en un <code>NgModule</code>.</summary>
+    <div class="answer"><p><code>declarations</code> registra los componentes, directivas y pipes que <em>pertenecen</em> al módulo; <code>imports</code> trae otros módulos cuyas declaraciones necesita. Un componente standalone no se declara en ningún módulo.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>31. ¿Qué tres clases forman la API reactiva de formularios?</summary>
+    <div class="answer"><p><code>FormControl</code> (un campo), <code>FormGroup</code> (grupo de campos) y <code>FormArray</code> (lista dinámica de controles). Se importa <code>ReactiveFormsModule</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>32. ¿Cómo se declara un campo obligatorio de al menos 3 caracteres?</summary>
+    <div class="answer"><p><code>new FormControl('', [Validators.required, Validators.minLength(3)])</code>, o con <code>FormBuilder</code>: <code>['', [Validators.required, Validators.minLength(3)]]</code>.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>33. ¿Qué diferencias hay entre <code>providedIn: 'root'</code> y registrar el servicio en <code>providers</code> de un componente?</summary>
+    <div class="answer">
+      <p><code>providedIn: 'root'</code> crea una única instancia para toda la aplicación. En <code>providers</code> del componente, el servicio tiene alcance en ese componente y sus hijos, con una instancia nueva por cada instancia del componente.</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary>34. ¿Qué dos formas de inyección de dependencias existen y cuál es la moderna?</summary>
+    <div class="answer"><p>Por constructor (<code>constructor(private logger: LoggerService)</code>) y con la función <code>inject()</code> (<code>private logger = inject(LoggerService)</code>), que es la recomendada en Angular moderno.</p></div>
+  </details>
+
+  <details class="qa">
+    <summary>35. ¿Qué debe hacer un componente que se suscribe a un observable que no se completa?</summary>
+    <div class="answer"><p>Cancelar la suscripción al destruirse, con <code>ngOnDestroy</code> o con <code>takeUntilDestroyed()</code>, para evitar fugas de memoria.</p></div>
+  </details>
+</section>
+
+<!-- ==================== 15. GLOSARIO ==================== -->
+<section class="sec" id="glosario">
+  <div class="sec-head">
+    <div class="eyebrow"><span class="num">15</span> Cierre</div>
+    <h2>Glosario y repaso final</h2>
+    <p class="intro">
+      Términos que conviene poder definir en una línea, seguidos del resumen de ideas
+      imprescindibles y de los recursos oficiales para ampliar.
+    </p>
+  </div>
+
+  <h3>Glosario</h3>
+  <div class="tablewrap">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Término</th><th>Definición breve</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Angular CLI</td><td>Herramienta de línea de comandos (<code>ng</code>) para crear, servir, compilar y probar proyectos.</td></tr>
+          <tr><td>SPA</td><td><em>Single Page Application</em>: una sola página HTML que cambia de vista sin recargar.</td></tr>
+          <tr><td>Componente</td><td>Unidad de interfaz formada por clase + plantilla + estilos, con un <code>selector</code>.</td></tr>
+          <tr><td>Standalone</td><td>Componente (o directiva/pipe) que no depende de un <code>NgModule</code> e importa lo que usa.</td></tr>
+          <tr><td>Interpolación</td><td>Mostrar datos de la clase en la plantilla con <code>{{ }}</code>.</td></tr>
+          <tr><td>Binding</td><td>Enlace entre los datos del componente y la vista (unidireccional o bidireccional).</td></tr>
+          <tr><td>Signal</td><td>Valor reactivo que avisa a Angular cuando cambia; se lee con paréntesis.</td></tr>
+          <tr><td>Computed</td><td>Signal derivado de otros signals, memorizado y de solo lectura.</td></tr>
+          <tr><td>Effect</td><td>Función que se ejecuta cuando cambian los signals que lee, para efectos secundarios.</td></tr>
+          <tr><td>Directiva estructural</td><td>Directiva que modifica el DOM (<code>*ngIf</code>, <code>*ngFor</code>); hoy se prefieren <code>@if</code> y <code>@for</code>.</td></tr>
+          <tr><td>Router</td><td>Servicio que gestiona la navegación y decide qué componente se muestra según la URL.</td></tr>
+          <tr><td>Guard</td><td>Función que decide si se puede activar, salir o cargar una ruta.</td></tr>
+          <tr><td>Lazy loading</td><td>Carga diferida de código: se descarga solo cuando se necesita.</td></tr>
+          <tr><td>Input / Output</td><td>Canal de entrada de datos al hijo / canal de eventos del hijo hacia el padre.</td></tr>
+          <tr><td>NgModule</td><td>Clase con <code>@NgModule</code> que agrupa componentes, módulos y servicios (organización clásica).</td></tr>
+          <tr><td>FormControl / FormGroup / FormArray</td><td>Piezas de los formularios reactivos: campo, grupo y lista dinámica.</td></tr>
+          <tr><td>Servicio</td><td>Clase con <code>@Injectable()</code> que encapsula lógica reutilizable o acceso a datos.</td></tr>
+          <tr><td>DI</td><td>Inyección de dependencias: Angular entrega las instancias que una clase declara necesitar.</td></tr>
+          <tr><td>Provider</td><td>Registro que indica a Angular cómo obtener una dependencia y en qué ámbito.</td></tr>
+          <tr><td>Pipe</td><td>Transformación de datos en la plantilla, por ejemplo <code>date</code> o <code>uppercase</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Las diez ideas que no se te pueden olvidar</h3>
+  <ol>
+    <li><code>node -v</code> y <code>npm -v</code> comprueban la instalación; <code>ng version</code> comprueba el CLI.</li>
+    <li>Angular 22 exige Node 22.22.3+, 24.15.0+ o 26.x.</li>
+    <li><code>ng serve</code> sirve en <code>http://localhost:4200/</code>; <code>--open</code> abre el navegador y <code>--port</code> cambia el puerto.</li>
+    <li>Los componentes son standalone por defecto desde Angular 19: lo que usa la plantilla va en <code>imports</code>.</li>
+    <li>Cuatro bindings: <code>{{ }}</code>, <code>[]</code>, <code>()</code> y <code>[()]</code>.</li>
+    <li>Un signal se lee con paréntesis; <code>set</code> sustituye, <code>update</code> transforma, <code>computed</code> deriva y <code>effect</code> produce efectos secundarios.</li>
+    <li><code>@if</code>/<code>@else</code> y <code>@for</code> con <code>track</code> obligatorio y <code>@empty</code> no necesitan imports.</li>
+    <li>Routing: <code>Routes</code> + <code>provideRouter</code> + <code>&lt;router-outlet&gt;</code> + <code>routerLink</code>.</li>
+    <li>Padre → hijo con <code>input()</code>; hijo → padre con <code>output()</code>; ambas con <code>model()</code>.</li>
+    <li>Formularios reactivos: <code>ReactiveFormsModule</code> + <code>FormGroup</code> + <code>formControlName</code> + <code>Validators</code>.</li>
+  </ol>
+
+  <h3>Para ampliar</h3>
+  <ul>
+    <li><strong>Documentación oficial de Angular:</strong> <code>angular.dev</code> — guías de componentes, signals, routing y formularios.</li>
+    <li><strong>Node.js:</strong> <code>nodejs.org</code> — descargas del Prebuilt Installer y calendario de versiones LTS.</li>
+    <li><strong>Angular Material:</strong> <code>material.angular.dev</code> — catálogo de componentes y temas.</li>
+    <li><strong>TypeScript:</strong> <code>typescriptlang.org</code> — tipos, interfaces y genéricos.</li>
+  </ul>
+
+  <div class="note exam">
+    <span class="ico">🎯</span>
+    <div class="body">
+      <span class="label">Último consejo</span>
+      <p>
+        Antes de entrar al examen, repasa la tabla «Clásico frente a moderno» y la chuleta de
+        errores. La mayoría de las preguntas se responden sabiendo <strong>qué API es la actual</strong>
+        y <strong>qué hay que importar</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="no-results" id="noResults">
+  No hay resultados para esa búsqueda. Prueba con otro término (por ejemplo «signal», «router» o «formulario»).
+</div>
+
+<footer class="foot">
+  <div class="row">
+    <div>
+      <strong>Guía de examen · Angular 22</strong><br>
+      Instalación · Componentes · Binding · Signals · Control flow · Routing · Formularios · Servicios · NgModule
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <button class="top-link" id="printBtn" type="button">🖨 Imprimir / PDF</button>
+      <a class="top-link" href="#portada">↑ Volver al inicio</a>
+    </div>
+  </div>
+  <p style="margin:14px 0 0; font-size:.78rem; color:var(--muted)">
+    Documento de estudio autocontenido: no usa CDN, tipografías ni scripts externos.
+    Basado en el temario del examen y en la documentación de Angular.
+  </p>
+</footer>
+
+    </div><!-- /.content -->
+  </main>
+</div><!-- /.layout -->
+
+<script>
+(function () {
+  'use strict';
+
+  var d = document;
+  var root = d.documentElement;
+  var $ = function (sel, ctx) { return (ctx || d).querySelector(sel); };
+  var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || d).querySelectorAll(sel)); };
+
+  /* ---------------- almacenamiento seguro ---------------- */
+  var store = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  /* ---------------- tema claro / oscuro ---------------- */
+  var themeBtns = [$('#themeToggle'), $('#themeToggleMobile')].filter(Boolean);
+
+  function paintThemeBtn() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    themeBtns.forEach(function (b) {
+      b.textContent = dark ? '☀ Claro' : '◐ Tema';
+      b.setAttribute('aria-pressed', String(dark));
+    });
+  }
+
+  var saved = store.get('guia-theme');
+  if (saved === 'dark' || saved === 'light') {
+    root.setAttribute('data-theme', saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    root.setAttribute('data-theme', 'dark');
+  }
+  paintThemeBtn();
+
+  themeBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      store.set('guia-theme', next);
+      paintThemeBtn();
+    });
+  });
+
+  /* ---------------- menú móvil ---------------- */
+  var sidebar = $('#sidebar');
+  var overlay = $('#overlay');
+  var navToggle = $('#navToggle');
+
+  function closeNav() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('show');
+    d.body.classList.remove('nav-open');
+  }
+
+  if (navToggle && sidebar) {
+    navToggle.addEventListener('click', function () {
+      var open = sidebar.classList.toggle('open');
+      if (overlay) overlay.classList.toggle('show', open);
+      d.body.classList.toggle('nav-open', open);
+    });
+  }
+  if (overlay) overlay.addEventListener('click', closeNav);
+  if (sidebar) {
+    sidebar.addEventListener('click', function (e) {
+      if (e.target.closest('a')) closeNav();
+    });
+  }
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeNav();
+  });
+
+  /* ---------------- progreso de lectura ---------------- */
+  var progress = $('#progress');
+  var ticking = false;
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      var h = d.documentElement.scrollHeight - window.innerHeight;
+      var pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+      if (progress) progress.style.width = Math.min(100, Math.max(0, pct)) + '%';
+      spy();
+      ticking = false;
+    });
+  }
+
+  /* ---------------- scrollspy ---------------- */
+  var tocLinks = $$('#toc a');
+  var sections = tocLinks.map(function (a) {
+    return d.querySelector(a.getAttribute('href'));
+  });
+
+  function spy() {
+    var y = window.scrollY + 130;
+    var current = -1;
+    sections.forEach(function (sec, i) {
+      if (!sec) return;
+      if (sec.offsetTop <= y) current = i;
+    });
+    tocLinks.forEach(function (a, i) {
+      a.classList.toggle('active', i === current);
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---------------- búsqueda ---------------- */
+  var input = $('#q');
+  var allSections = $$('main .sec');
+  var hero = $('.hero');
+  var noResults = $('#noResults');
+  var portadaLink = d.querySelector('#toc a[href="#portada"]');
+
+  function normalize(s) {
+    s = s.toLowerCase();
+    try {
+      s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    } catch (e) {}
+    return s;
+  }
+
+  function runSearch() {
+    if (!input) return;
+    var q = normalize(input.value.trim());
+
+    if (q.length < 2) {
+      allSections.forEach(function (s) { s.classList.remove('sec-hidden'); });
+      tocLinks.forEach(function (a) { a.style.display = ''; });
+      if (hero) hero.style.display = '';
+      if (noResults) noResults.style.display = 'none';
+      return;
+    }
+
+    var visible = 0;
+
+    allSections.forEach(function (sec) {
+      var match = normalize(sec.textContent).indexOf(q) !== -1;
+      sec.classList.toggle('sec-hidden', !match);
+      if (match) visible++;
+
+      var id = sec.id;
+      tocLinks.forEach(function (a) {
+        if (a.getAttribute('href') === '#' + id) {
+          a.style.display = match ? '' : 'none';
+        }
+      });
+    });
+
+    if (hero) hero.style.display = 'none';
+    if (portadaLink) portadaLink.style.display = 'none';
+    if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  if (input) {
+    var t;
+    input.addEventListener('input', function () {
+      clearTimeout(t);
+      t = setTimeout(runSearch, 120);
+    });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        input.value = '';
+        runSearch();
+        input.blur();
+      }
+    });
+  }
+
+  /* atajo "/" para buscar */
+  window.addEventListener('keydown', function (e) {
+    var tag = (e.target && e.target.tagName) || '';
+    var typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable);
+    if (e.key === '/' && !typing && input) {
+      e.preventDefault();
+      closeNav();
+      input.focus();
+      input.select();
+    }
+  });
+
+  /* ---------------- resaltado de sintaxis ---------------- */
+  function esc(s) {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  var TS_KW = ['import', 'from', 'export', 'default', 'class', 'const', 'let', 'var', 'new', 'return',
+    'private', 'public', 'protected', 'readonly', 'static', 'constructor', 'if', 'else', 'for', 'of',
+    'in', 'async', 'await', 'extends', 'implements', 'interface', 'type', 'function', 'this', 'true',
+    'false', 'null', 'undefined', 'void', 'number', 'string', 'boolean', 'any', 'as', 'switch',
+    'case', 'break', 'throw', 'try', 'catch', 'get', 'set', 'super'];
+
+  var RES = {
+    ts: new RegExp(
+      '(?<com>\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)|' +
+      "(?<str>'(?:\\\\.|[^'\\\\])*'|\"(?:\\\\.|[^\"\\\\])*\"|`(?:\\\\.|[^`\\\\])*`)|" +
+      '(?<dec>@[A-Za-z_$][\\w$]*)|' +
+      '(?<kw>\\b(?:' + TS_KW.join('|') + ')\\b)|' +
+      '(?<num>\\b\\d+(?:\\.\\d+)?\\b)|' +
+      '(?<fn>\\b[A-Za-z_$][\\w$]*(?=\\s*\\())',
+      'g'
+    ),
+    html: new RegExp(
+      '(?<com><!--[\\s\\S]*?-->)|' +
+      '(?<interp>\\{\\{[\\s\\S]*?\\}\\})|' +
+      '(?<tag><\\/?[A-Za-z][\\w:.-]*)|' +
+      '(?<attr>[A-Za-z_:@*.#\\[\\]()-][A-Za-z_:@*.#\\[\\]().\\-]*(?=\\s*=))|' +
+      '(?<str>"[^"]*"|\'[^\']*\')|' +
+      '(?<block>@[a-z]+)',
+      'g'
+    ),
+    bash: new RegExp(
+      '(?<com>#[^\\n]*)|' +
+      '(?<str>"[^"]*"|\'[^\']*\')|' +
+      '(?<flag>\\s--?[A-Za-z][\\w-]*)|' +
+      '(?<kw>\\b(?:npm|ng|node|npx|cd|git|sudo|install|version|serve)\\b)',
+      'g'
+    ),
+    css: new RegExp(
+      '(?<com>\\/\\*[\\s\\S]*?\\*\\/)|' +
+      '(?<str>"[^"]*"|\'[^\']*\')|' +
+      '(?<num>\\b\\d+(?:\\.\\d+)?(?:px|rem|em|%|s|ms|deg|vh|vw)?\\b)|' +
+      '(?<attr>^\\s*[a-z-]+(?=\\s*:))',
+      'gm'
+    )
+  };
+
+  var TOKEN_CLASS = {
+    com: 't-com', str: 't-str', dec: 't-dec', kw: 't-kw',
+    num: 't-num', fn: 't-fn', tag: 't-tag', attr: 't-attr',
+    interp: 't-interp', block: 't-block', flag: 't-flag'
+  };
+
+  function highlight(code, lang) {
+    var re = RES[lang];
+    if (!re) return esc(code);
+
+    re.lastIndex = 0;
+    var out = '';
+    var last = 0;
+    var m;
+
+    while ((m = re.exec(code)) !== null) {
+      if (m[0] === '') { re.lastIndex++; continue; }
+
+      out += esc(code.slice(last, m.index));
+
+      var cls = '';
+      var g = m.groups || {};
+      for (var key in TOKEN_CLASS) {
+        if (g[key] !== undefined) { cls = TOKEN_CLASS[key]; break; }
+      }
+      out += cls ? '<span class="' + cls + '">' + esc(m[0]) + '</span>' : esc(m[0]);
+
+      last = m.index + m[0].length;
+    }
+
+    out += esc(code.slice(last));
+    return out;
+  }
+
+  $$('.code pre code').forEach(function (block) {
+    var lang = 'ts';
+    if (block.classList.contains('lang-html')) lang = 'html';
+    else if (block.classList.contains('lang-bash')) lang = 'bash';
+    else if (block.classList.contains('lang-css')) lang = 'css';
+
+    var raw = block.textContent;
+    block.dataset.raw = 'saved';
+    block.innerHTML = highlight(raw, lang);
+  });
+
+  /* ---------------- botón de copiar ---------------- */
+  $$('.code').forEach(function (fig) {
+    var caption = fig.querySelector('figcaption');
+    var code = fig.querySelector('pre code');
+    if (!caption || !code) return;
+
+    var btn = d.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy';
+    btn.textContent = 'Copiar';
+    btn.setAttribute('aria-label', 'Copiar código');
+
+    btn.addEventListener('click', function () {
+      var text = code.textContent;
+      var done = function () {
+        btn.textContent = '¡Copiado!';
+        btn.classList.add('done');
+        setTimeout(function () {
+          btn.textContent = 'Copiar';
+          btn.classList.remove('done');
+        }, 1600);
+      };
+      var fail = function () {
+        btn.textContent = 'Selecciona y copia';
+        setTimeout(function () { btn.textContent = 'Copiar'; }, 1800);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () {
+          fallbackCopy(text) ? done() : fail();
+        });
+      } else {
+        fallbackCopy(text) ? done() : fail();
+      }
+    });
+
+    caption.appendChild(btn);
+  });
+
+  function fallbackCopy(text) {
+    try {
+      var ta = d.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      ta.style.opacity = '0';
+      d.body.appendChild(ta);
+      ta.select();
+      var ok = d.execCommand && d.execCommand('copy');
+      d.body.removeChild(ta);
+      return !!ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /* ---------------- imprimir ---------------- */
+  var printBtn = $('#printBtn');
+  if (printBtn) {
+    printBtn.addEventListener('click', function () {
+      allSections.forEach(function (s) { s.classList.remove('sec-hidden'); });
+      if (hero) hero.style.display = '';
+      window.print();
+    });
+  }
+})();
+</script>
+</body>
+</html>
